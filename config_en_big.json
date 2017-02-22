@@ -1,0 +1,14 @@
+{
+  "word2vec" : {
+    "model" : "corpus_en.norm-sz100-w8-cb0-it1-min20",
+    "path" : "/Users/gorbunovdv/Downloads/corpus_en.norm-sz100-w8-cb0-it1-min20.w2v",
+    "valid_letters": "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM-"
+  },
+  "parameters" : {
+    "transformations_build" : {
+      "remove_add_symbols_count" : 3,
+      "total_changes_count" : 3,
+      "use_shortest_transformations" : true
+    }
+  }
+}

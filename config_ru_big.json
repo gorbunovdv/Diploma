@@ -1,0 +1,14 @@
+{
+  "word2vec" : {
+    "model" : "all.norm-sz100-w10-cb0-it1-min100.w2v",
+    "path" : "/Users/gorbunovdv/Downloads/all.norm-sz100-w10-cb0-it1-min100.w2v",
+    "valid_letters": "йцукенгшщзфывапролдячсмитьёЁЙЦУКЕНГШЩЗФЫВАПРОЛДЯЧСМИТЬ-"
+  },
+  "parameters" : {
+    "transformations_build" : {
+      "remove_add_symbols_count" : 3,
+      "total_changes_count" : 4,
+      "use_shortest_transformations" : true
+    }
+  }
+}
