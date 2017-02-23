@@ -18,6 +18,8 @@ public:
   Transformation(int32_t from_word, int32_t to_delete, int32_t to_word, int32_t to_add, Type type) : from_word(
     from_word), to_delete(to_delete), to_word(to_word), to_add(to_add), type(type) {}
 
+  Transformation() = default;
+
   bool validate(const std::shared_ptr<Word2Vec> &word2vec) const {
     auto from_vocab = word2vec->index2word[from_word]->word;
     auto to_vocab = word2vec->index2word[to_word]->word;
@@ -44,12 +46,12 @@ public:
     }
   }
 
-  static utf_string hash(const std::shared_ptr<Word2Vec> &word2vec,
-                         int32_t from_word,
-                         int32_t to_delete,
-                         int32_t to_word,
-                         int32_t to_add,
-                         Transformation::Type type)
+  static utf_string getClass(const std::shared_ptr<Word2Vec>& word2vec,
+      int32_t from_word,
+      int32_t to_delete,
+      int32_t to_word,
+      int32_t to_add,
+      Transformation::Type type)
   {
     const auto &from_vocab = word2vec->index2word[from_word]->word;
     const auto &to_vocab = word2vec->index2word[to_word]->word;
@@ -61,9 +63,19 @@ public:
     }
   }
 
-  utf_string hash(const std::shared_ptr<Word2Vec> &word2vec) const {
-    return Transformation::hash(word2vec, from_word, to_delete, to_word, to_add, type);
+  utf_string getClass(const std::shared_ptr<Word2Vec>& word2vec) const {
+    return Transformation::getClass(word2vec, from_word, to_delete, to_word, to_add, type);
   }
+
+  std::pair<int64_t, int64_t> hash(const std::shared_ptr<Word2Vec> &word2vec) {
+    utf_string clazz = getClass(word2vec);
+    std::pair<int64_t, int64_t> hashResult(0, 0);
+    for (auto c : clazz) {
+      hashResult.first = hashResult.first * 3333333 + c + 1;
+      hashResult.second = hashResult.second * 5555555 + c + 1;
+    }
+    return hashResult;
+  };
 
 private:
   int32_t from_word, to_delete;

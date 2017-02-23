@@ -3,7 +3,7 @@ project(Diploma)
 
 include(cmake/common.cmake)
 
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES main.cpp managers/filter_transformation_manager.h)
 
 find_package(Armadillo REQUIRED)
 include_directories(${ARMADILLO_INCLUDE_DIRS})

@@ -7,8 +7,12 @@
   "parameters" : {
     "transformations_build" : {
       "remove_add_symbols_count" : 3,
-      "total_changes_count" : 4,
-      "use_shortest_transformations" : true
+      "total_changes_count" : 6,
+      "use_shortest_transformations" : true,
+      "result_path": "/home/dgorbunov/Documents/Diploma/results/transformations_build"
+    },
+    "transformations_filter": {
+      "min_transformations_count": 10
     }
   }
 }

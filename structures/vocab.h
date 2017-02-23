@@ -5,6 +5,7 @@
 #ifndef DIPLOMA_VOCAB_H
 #define DIPLOMA_VOCAB_H
 
+#include <memory>
 #include <algorithm>
 #include "../utf/utf_string.h"
 
