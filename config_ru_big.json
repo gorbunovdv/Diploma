@@ -1,18 +1,23 @@
 {
   "word2vec" : {
     "model" : "all.norm-sz100-w10-cb0-it1-min100.w2v",
-    "path" : "/Users/gorbunovdv/Downloads/all.norm-sz100-w10-cb0-it1-min100.w2v",
+    "path" : "/home/dgorbunov/Downloads/all.norm-sz100-w10-cb0-it1-min100.w2v",
     "valid_letters": "йцукенгшщзфывапролдячсмитьёЁЙЦУКЕНГШЩЗФЫВАПРОЛДЯЧСМИТЬ-"
+  },
+  "transformations_iterator" : {
+    "max_transformations_count_in_file" : 20000000
   },
   "parameters" : {
     "transformations_build" : {
       "remove_add_symbols_count" : 3,
-      "total_changes_count" : 6,
+      "total_changes_count" : 3,
       "use_shortest_transformations" : true,
-      "result_path": "/home/dgorbunov/Documents/Diploma/results/transformations_build"
+      "result_path": "/home/dgorbunov/Documents/Diploma/results/transformations_build",
+      "files_count": 8
     },
     "transformations_filter": {
-      "min_transformations_count": 10
+      "sorted_each_path": "/home/dgorbunov/Documents/Diploma/results/sorted_each",
+      "sorted_path": "/home/dgorbunov/Documents/Diploma/results/sorted"
     }
   }
 }

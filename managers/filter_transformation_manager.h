@@ -7,103 +7,90 @@
 
 #include <complex>
 #include <dirent.h>
+#include <fcntl.h>
 #include "../Word2Vec/word2vec.h"
 #include "../structures/transformation.h"
 
 class FilterTransformationManager {
 public:
   static void filterAllTransformations(const std::shared_ptr<Word2Vec> &word2vec) {
-    std::vector<std::string> filesPath = getFilesPaths();
-    LOGGER() << "There are " << len(filesPath) << " paths" << std::endl;
-    for (auto str : filesPath) {
-      LOGGER() << str << std::endl;
+    auto sourcePath = config["parameters"]["transformations_build"]["result_path"].asString();
+    auto destPath = config["parameters"]["transformations_filter"]["sorted_each_path"].asString();
+    auto files = TransformationsReader::getFiles(sourcePath);
+    for (const auto &sourceFile : files) {
+      auto destFile = destPath + sourceFile.substr(sourcePath.size());
+      sortFile(sourceFile, destFile, word2vec);
     }
-    LOGGER() << "Filtering transformations" << std::endl;
-    std::set<std::pair<int64_t, int64_t>> to_delete;
-    int32_t transformations_to_delete_count = 0;
-    int32_t min_transformations_count = config["parameters"]["transformations_filter"]["min_transformations_count"].asInt();
-    for (const auto &i : FilterTransformationManager::getTransformationsCount(word2vec, filesPath)) {
-      if (i.second < min_transformations_count) {
-        to_delete.insert(i.first);
-        transformations_to_delete_count += i.second;
-      }
-    }
-    LOGGER() << "Need to delete " << len(to_delete) << " transformation classes" << std::endl;
-    LOGGER() << "Deleting" << transformations_to_delete_count << " transformations in total" << std::endl;
-    FilterTransformationManager::filterAllTransformationsInternal(word2vec, filesPath, to_delete);
+    auto destSortedPath = config["parameters"]["transformations_filter"]["sorted_path"].asString();
+    sortFiles(files, destSortedPath, word2vec);
   }
 
 private:
-  static void filterAllTransformationsInternal(const std::shared_ptr<Word2Vec> &word2vec, const std::vector<std::string> &filesPath,
-      const std::set<std::pair<int64_t, int64_t>> &to_delete)
-  {
-#pragma omp parallel for num_threads(PROCESSES_COUNT)
-    for (int32_t i = 0; i < len(filesPath); i++) {
-      FILE *input = fopen(filesPath[i].data(), "r");
-      if (input == nullptr) {
-        throw std::runtime_error("Could not open file " + filesPath[i]);
+  static void sortFiles(auto files, std::string destPath, const std::shared_ptr<Word2Vec> &word2vec) {
+    std::vector<FILE*> openedFiles(len(files));
+    for (int32_t i = 0; i < len(files); i++) {
+      openedFiles[i] = fopen(files[i].data(), "r");
+      if (openedFiles[i] == nullptr) {
+        throw std::runtime_error("Failed to open file " + files[i]);
       }
-      FILE *output = fopen((filesPath[i] + ".filtered").c_str(), "w");
-      if (output == nullptr) {
-        throw std::runtime_error("Could not open file for write " + filesPath[i] + ".filtered");
-      }
-      while (!feof(input)) {
-        Transformation transformation;
-        fread(&transformation, sizeof(transformation), 1, input);
-        if (to_delete.count(transformation.hash(word2vec)) == 0) {
-          fwrite(&transformation, sizeof(transformation), 1, input);
+    }
+    std::vector<std::pair<Transformation, bool>> lastTransformation(len(files), std::make_pair(Transformation(), false));
+    std::vector<std::pair<int64_t, int64_t>> hashes(len(files));
+    TransformationsWriter writer(destPath);
+    LOGGER() << "Sorting files" << std::endl;
+    for (;;) {
+      int32_t best = -1;
+      for (int32_t i = 0; i < len(files); i++) {
+        if (!lastTransformation[i].second && !feof(openedFiles[i])) {
+          fread(&lastTransformation[i].first, sizeof(Transformation), 1, openedFiles[i]);
+          if (!lastTransformation[i].first.validate(word2vec)) {
+            throw std::runtime_error("Invalid tranformation");
+          }
+          hashes[i] = lastTransformation[i].first.hash(word2vec);
+          lastTransformation[i].second = true;
+        }
+        if (lastTransformation[i].second && (best == -1 || hashes[best] > hashes[i])) {
+          best = i;
         }
       }
-      fclose(input);
-      fclose(output);
+      if (best == -1) {
+        break;
+      }
+      writer.write(lastTransformation[best].first);
+      RESULT() << lastTransformation[best].first.getClass(word2vec) << std::endl;
+      lastTransformation[best].second = false;
     }
-  }
-
-  static std::map<std::pair<int64_t, int64_t>, int32_t> getTransformationsCount(const std::shared_ptr<Word2Vec> &word2vec, const std::vector<std::string> &filesPath) {
-    std::vector<std::map<std::pair<int64_t, int64_t>, int32_t>> result(len(filesPath));
-#pragma omp parallel for num_threads(PROCESSES_COUNT)
-    for (int32_t i = 0; i < len(filesPath); i++) {
-      FILE *file = fopen(filesPath[i].data(), "r");
-      if (file == nullptr) {
-        throw std::runtime_error("Could not open file " + filesPath[i]);
-      }
-      while (!feof(file)) {
-        Transformation transformation;
-        fread(&transformation, sizeof(transformation), 1, file);
-        result[i][transformation.hash(word2vec)]++;
-      }
+    for (FILE *file : openedFiles) {
       fclose(file);
     }
-    for (int32_t i = 1; i < len(filesPath); i++) {
-      if (len(result[i]) > len(result.front())) {
-        swap(result[i], result.front());
-      }
-      for (const auto &pair : result[i]) {
-        result.front()[pair.first] += pair.second;
-      }
-      result[i].clear();
-    }
-    LOGGER() << "Different classes: " << len(result.front()) << std::endl;
-    return result.front();
   }
 
-  static std::vector<std::string> getFilesPaths() {
-    std::string path = config["parameters"]["transformations_build"]["result_path"].asString();
-    std::vector<std::string> result;
-    DIR *dir;
-    struct dirent *ent;
-    if ((dir = opendir(path.data())) != NULL) {
-      while ((ent = readdir (dir)) != NULL) {
-        if (*ent->d_name != '.') {
-          result.push_back(path + "/" + std::string(ent->d_name));
-        }
-      }
-      closedir (dir);
-    } else {
-      perror ("");
-      throw std::runtime_error("Failed to open directory " + path);
+  static void sortFile(std::string sourceFile, std::string destFile, const std::shared_ptr<Word2Vec> &word2vec) {
+    LOGGER() << "Sorting file " << sourceFile << " into " << destFile << std::endl;
+    FILE *fin = fopen(sourceFile.data(), "r");
+    if (fin == nullptr) {
+      throw std::runtime_error("Failed to open file " + sourceFile);
     }
-    return result;
+    std::vector<std::pair<std::pair<int64_t, int64_t>, Transformation>> transformations;
+    while (!feof(fin)) {
+      static Transformation transformation;
+      fread(&transformation, sizeof(transformation), 1, fin);
+      transformations.push_back(std::make_pair(transformation.hash(word2vec), transformation));
+    }
+    fclose(fin);
+    LOGGER() << "Sorting " << len(transformations) << " transformations" << std::endl;
+    std::sort(transformations.begin(), transformations.end(), [] (const auto &a, const auto &b) {
+      return a.first < b.first;
+    });
+    LOGGER() << "Sorted " << len(transformations) << " transformations" << std::endl;
+    FILE *fout = fopen(destFile.data(), "w");
+    if (fout == nullptr) {
+      throw std::runtime_error("Failed to open file " + destFile + " to write");
+    }
+    for (const auto &transformation : transformations) {
+      fwrite(&transformation.second, sizeof(transformation), 1, fout);
+    }
+    fclose(fout);
   }
 };
 
