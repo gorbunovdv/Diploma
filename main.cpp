@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
   }
   init_config(configFile);
   auto word2vecModelPath = config["word2vec"]["path"].asString();
-  FILE *model = fopen(word2vecModelPath.data(), "r");
+  FilePointer model = fopen(word2vecModelPath.data(), "r");
   if (model == nullptr) {
     throw std::runtime_error("Word2Vec model " + word2vecModelPath + " could not be opened");
   }

@@ -14,9 +14,10 @@
 #include "../logging/logging.h"
 #include "../utf/utf_string.h"
 #include "../structures/vocab.h"
+#include "../structures/transformation.h"
 
 struct Word2Vec {
-  Word2Vec(FILE *file) {
+  Word2Vec(FilePointer &file) {
     LOGGER() << "Loading word2vec model" << std::endl;
     int64_t wordsCount_, dimensionsCount_;
     fscanf(file, "%lld", &wordsCount_);
@@ -61,13 +62,43 @@ struct Word2Vec {
     return dimensionsCount;
   }
 
+  Transformation read(FilePointer &file) {
+    static Transformation result;
+    int32_t read = fread(&result, sizeof(Transformation), 1, file);
+    if (read != 1) {
+      LOGGER() << "Read " << read << std::endl;
+      perror("");
+      throw std::runtime_error("IO exception");
+    }
+#ifdef DEBUG_TRANSFORMATIONS
+    if (!result.validate(this)) {
+      throw std::runtime_error("Validation failed");
+    }
+#endif
+    return result;
+  }
+
+  void write(FilePointer &file, Transformation transformation) {
+#ifdef DEBUG_TRANSFORMATIONS
+    if (!transformation.validate(this)) {
+      throw std::runtime_error("Validation failed");
+    }
+#endif
+    int32_t written = fwrite(&transformation, sizeof(Transformation), 1, file);
+    if (written != 1) {
+      LOGGER() << "Written " << written << std::endl;
+      perror("");
+      throw std::runtime_error("IO exception");
+    }
+  }
+
   int32_t wordsCount;
   int32_t dimensionsCount;
   std::vector<std::shared_ptr<Vocab>> index2word;
   std::map<utf_string, std::shared_ptr<Vocab>> vocab;
 
 private:
-  static utf_string read_word(FILE *file) {
+  static utf_string read_word(FilePointer &file) {
     std::string result;
     while (1) {
       int c = fgetc(file);

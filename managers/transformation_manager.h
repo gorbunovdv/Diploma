@@ -20,7 +20,7 @@
 class TransformationManager {
 public:
   static void getAllTransformations(const std::shared_ptr<Word2Vec> &word2vec) {
-    TransformationsWriter writer(config["parameters"]["transformations_build"]["result_path"].asString());
+    TransformationsWriter writer(config["parameters"]["transformations_build"]["result_path"].asString(), word2vec);
     LOGGER() << "Building SUFFIX tranformations" << std::endl;
     TransformationManager::getAllTransformationsInternal(word2vec, Transformation::SUFFIX, writer);
     LOGGER() << "Building PREFIX tranformations" << std::endl;

@@ -20,7 +20,8 @@ public:
 
   Transformation() = default;
 
-  bool validate(const std::shared_ptr<Word2Vec> &word2vec) const {
+  template<typename Word2Vec>
+  bool validate(const Word2Vec &word2vec) const {
     auto from_vocab = word2vec->index2word[from_word]->word;
     auto to_vocab = word2vec->index2word[to_word]->word;
     if (type == PREFIX) {
@@ -34,6 +35,7 @@ public:
     return len(from_vocab) - lcp <= to_delete && len(to_vocab) - lcp <= to_add;
   }
 
+  template<typename Word2Vec>
   void print(const std::shared_ptr<Word2Vec> &word2vec) const {
     const auto &from_vocab = word2vec->index2word[from_word]->word;
     const auto &to_vocab = word2vec->index2word[to_word]->word;
@@ -46,6 +48,7 @@ public:
     }
   }
 
+  template<typename Word2Vec>
   static utf_string getClass(const std::shared_ptr<Word2Vec>& word2vec,
       int32_t from_word,
       int32_t to_delete,
@@ -63,10 +66,12 @@ public:
     }
   }
 
+  template<typename Word2Vec>
   utf_string getClass(const std::shared_ptr<Word2Vec>& word2vec) const {
     return Transformation::getClass(word2vec, from_word, to_delete, to_word, to_add, type);
   }
 
+  template<typename Word2Vec>
   std::pair<int64_t, int64_t> hash(const std::shared_ptr<Word2Vec> &word2vec) {
     utf_string clazz = getClass(word2vec);
     std::pair<int64_t, int64_t> hashResult(0, 0);

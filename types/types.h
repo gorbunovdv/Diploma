@@ -8,4 +8,6 @@
 #define len(x) (static_cast<int32_t>((x).size()))
 #define PROCESSES_COUNT 1
 
+using FilePointer = FILE*;
+
 #endif //DIPLOMA_TYPES_H

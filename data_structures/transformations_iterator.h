@@ -15,12 +15,13 @@
 
 class TransformationsReader {
 public:
-  TransformationsReader(std::string path) {
-    files = getFiles(path);
+  TransformationsReader(std::string path, const std::shared_ptr<Word2Vec> &word2vec) : word2vec(word2vec) {
+    auto vector = getFiles(path);
+    files = std::deque<std::string>(vector.begin(), vector.end());
   }
 
-  static std::deque<std::string> getFiles(std::string path) {
-    std::deque<std::string> files;
+  static std::vector<std::string> getFiles(std::string path) {
+    std::vector<std::string> files;
     DIR *dir;
     struct dirent *ent;
     if ((dir = opendir(path.data())) != NULL) {
@@ -53,18 +54,19 @@ public:
         throw std::runtime_error("Failed to open file " + next_file);
       }
     }
-    fread(&result, sizeof(Transformation), 1, current_file);
+    result = word2vec->read(current_file);
     return true;
   }
 
 private:
   std::deque<std::string> files;
-  FILE* current_file = nullptr;
+  FilePointer current_file = nullptr;
+  const std::shared_ptr<Word2Vec> word2vec;
 };
 
 class TransformationsWriter {
 public:
-  TransformationsWriter(std::string path): path(path) {
+  TransformationsWriter(std::string path, const std::shared_ptr<Word2Vec> &word2vec): path(path), word2vec(word2vec) {
     if (path == "") {
       throw std::runtime_error("Path is empty");
     }
@@ -77,7 +79,7 @@ public:
     if (current_file == nullptr || current_transformation_number > max_transformations_count_in_file) {
       createNextFile();
     }
-    fwrite(&transformation, sizeof(Transformation), 1, current_file);
+    word2vec->write(current_file, transformation);
   }
 
   ~TransformationsWriter() {
@@ -111,9 +113,10 @@ private:
   }
 
   std::string path;
-  FILE *current_file = nullptr;
+  FilePointer current_file = nullptr;
   int32_t current_file_number = 0, current_transformation_number = 0;
   int32_t max_transformations_count_in_file;
+  const std::shared_ptr<Word2Vec> word2vec;
 };
 
 #endif //DIPLOMA_TRANSFORMATIONS_ITERATOR_H
