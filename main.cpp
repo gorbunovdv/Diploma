@@ -26,14 +26,10 @@ int main(int argc, char **argv) {
   init_config(configFile);
   auto word2vecModelPath = config["word2vec"]["path"].asString();
   LOGGER() << "Using " << config["word2vec"]["model"].asString() << " as Word2Vec model" << std::endl;
-  FilePointer model = fopen(word2vecModelPath.data(), "r");
-  if (model == nullptr) {
-    throw std::runtime_error("Word2Vec model " + word2vecModelPath + " could not be opened");
-  }
+  BufferedReader model(word2vecModelPath);
   auto word2vec = std::make_shared<Word2Vec>(model);
   RoyalManager royal_manager(word2vec);
   royal_manager.run();
-  fclose(model);
   LOGGER() << "END!";
   return 0;
 }

@@ -53,12 +53,9 @@ private:
   }
 
   static void sortFiles(std::vector<std::string> files, std::string destPath, const std::shared_ptr<Word2Vec> &word2vec) {
-    std::vector<FilePointer> openedFiles(len(files));
+    std::vector<BufferedReader> openedFiles(len(files));
     for (int32_t i = 0; i < len(files); i++) {
-      openedFiles[i] = fopen(files[i].data(), "r");
-      if (openedFiles[i] == nullptr) {
-        throw std::runtime_error("Failed to open file " + files[i]);
-      }
+      openedFiles[i] = BufferedReader(files[i]);
     }
     std::vector<std::pair<Transformation, bool>> lastTransformation(len(files), std::make_pair(Transformation(), false));
     std::vector<std::pair<int64_t, int64_t>> hashes(len(files));
@@ -67,7 +64,7 @@ private:
     for (;;) {
       int32_t best = -1;
       for (int32_t i = 0; i < len(files); i++) {
-        if (!lastTransformation[i].second && !feof(openedFiles[i])) {
+        if (!lastTransformation[i].second && !openedFiles[i].eof()) {
           if (!word2vec->read(openedFiles[i], lastTransformation[i].first)) {
             continue;
           }
@@ -84,26 +81,19 @@ private:
       writer.write(lastTransformation[best].first);
       lastTransformation[best].second = false;
     }
-    for (FilePointer file : openedFiles) {
-      fclose(file);
-    }
   }
 
   static void sortFile(std::string sourceFile, std::string destFile, const std::shared_ptr<Word2Vec> &word2vec) {
     LOGGER() << "Sorting file " << sourceFile << " into " << destFile << std::endl;
-    FilePointer fin = fopen(sourceFile.data(), "r");
-    if (fin == nullptr) {
-      throw std::runtime_error("Failed to open file " + sourceFile);
-    }
+    BufferedReader fin(sourceFile);
     std::vector<std::pair<std::pair<int64_t, int64_t>, Transformation>> transformations;
-    while (!feof(fin)) {
+    while (!fin.eof()) {
       Transformation transformation;
       if (!word2vec->read(fin, transformation)) {
         continue;
       }
       transformations.push_back(std::make_pair(transformation.hash(word2vec), transformation));
     }
-    fclose(fin);
     LOGGER() << "Sorting " << len(transformations) << " transformations" << std::endl;
     std::sort(transformations.begin(), transformations.end(), [] (const auto &a, const auto &b) {
       return a.first < b.first;

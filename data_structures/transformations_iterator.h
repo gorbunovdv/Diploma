@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <deque>
 #include "../structures/transformation.h"
+#include "../utils.h"
 
 class TransformationsReader {
 public:
@@ -40,25 +41,21 @@ public:
   }
 
   bool next(Transformation &result) {
-    while (current_file == nullptr || feof(current_file)) {
-      if (current_file != nullptr && feof(current_file)) {
-        current_file = nullptr;
-        fclose(current_file);
+    while (!current_file.isDefined() || current_file.eof()) {
+      if (current_file.isDefined() && current_file.eof()) {
+        current_file = BufferedReader();
       }
       if (files.empty()) {
         return false;
       }
       std::string next_file = files.front();
       files.pop_front();
-      current_file = fopen(next_file.data(), "r");
-      if (current_file == nullptr) {
-        throw std::runtime_error("Failed to open file " + next_file);
-      }
+      current_file = BufferedReader(next_file);
     }
     if (word2vec->read(current_file, result)) {
       return true;
     }
-    if (feof(current_file) && !files.empty()) {
+    if (current_file.eof() && !files.empty()) {
       return next(result);
     }
     return false;
@@ -95,7 +92,7 @@ public:
 
 private:
   std::deque<std::string> files;
-  FilePointer current_file = nullptr;
+  BufferedReader current_file;
   const std::shared_ptr<Word2Vec> word2vec;
 };
 
@@ -157,12 +154,11 @@ private:
       fclose(current_file);
     }
     current_file_number++;
-    std::string next_file_path = path + "/" + convert(current_file_number) + ".bin";
-    current_file = fopen(next_file_path.data(), "w");
+    current_file_path = path + "/" + convert(current_file_number) + ".bin";
+    current_file = fopen(current_file_path.data(), "w");
     if (current_file == nullptr) {
-      throw std::runtime_error("Failed to open file " + next_file_path + " for write");
+      throw std::runtime_error("Could not open file " + current_file_path + " for write");
     }
-    current_file_path = next_file_path;
   }
 
   std::string path;
