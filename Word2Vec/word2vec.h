@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <string>
+#include <cstring>
 #include <vector>
 #include <map>
 #include "../config/config.h"
