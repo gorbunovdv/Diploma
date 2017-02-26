@@ -5,7 +5,7 @@
     "valid_letters": "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM-"
   },
   "transformations_iterator" : {
-    "max_transformations_count_in_file" : 60000000
+    "max_transformations_count_in_file" : 150000000
   },
   "parameters" : {
     "transformations_build" : {
