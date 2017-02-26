@@ -9,15 +9,16 @@
   },
   "parameters" : {
     "transformations_build" : {
-      "remove_add_symbols_count" : 1,
-      "total_changes_count" : 1,
+      "remove_add_symbols_count" : 3,
+      "total_changes_count" : 3,
       "use_shortest_transformations" : true,
       "result_path": "/Users/gorbunovdv/ClionProjects/Diploma/results/transformations_build"
     },
     "transformations_filter": {
       "sorted_each_path": "/Users/gorbunovdv/ClionProjects/Diploma/results/sorted_each",
       "sorted_path": "/Users/gorbunovdv/ClionProjects/Diploma/results/sorted",
-      "filtered_path": "/Users/gorbunovdv/ClionProjects/Diploma/results/filtered"
+      "filtered_path": "/Users/gorbunovdv/ClionProjects/Diploma/results/filtered",
+      "min_transformations_in_class": 10
     }
   }
 }

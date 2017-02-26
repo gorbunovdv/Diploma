@@ -19,11 +19,11 @@
 #include "../utils.h"
 
 struct Word2Vec {
-  Word2Vec(BufferedReader &file) {
+  Word2Vec(const std::unique_ptr<BufferedReader> &file) {
     LOGGER() << "Loading word2vec model" << std::endl;
     int64_t wordsCount_, dimensionsCount_;
-    fscanf(file.asFilePointer(), "%lld", &wordsCount_);
-    fscanf(file.asFilePointer(), "%lld", &dimensionsCount_);
+    fscanf(file->asFilePointer(), "%lld", &wordsCount_);
+    fscanf(file->asFilePointer(), "%lld", &dimensionsCount_);
     std::tie(wordsCount, dimensionsCount) = std::tie(wordsCount_, dimensionsCount_);
     std::set<int32_t> letters_list = utf_string(config["word2vec"]["valid_letters"].asString()).set();
     for (int32_t i = 0; i < wordsCount; i++) {
@@ -31,7 +31,7 @@ struct Word2Vec {
       auto cur = std::make_shared<Vocab>();
       cur->index = i;
       try {
-        cur->word = read_word(file.asFilePointer());
+        cur->word = read_word(file->asFilePointer());
         if (!check_if_word_is_valid(cur->word, letters_list)) {
           addWord = false;
         }
@@ -40,7 +40,7 @@ struct Word2Vec {
         addWord = false;
       }
       cur->syn0 = std::make_shared<std::vector<float>>(static_cast<size_t>(dimensionsCount));
-      fread(&cur->syn0->front(), sizeof(float), static_cast<size_t>(dimensionsCount), file.asFilePointer());
+      fread(&cur->syn0->front(), sizeof(float), static_cast<size_t>(dimensionsCount), file->asFilePointer());
       if (addWord) {
         index2word.push_back(cur);
       } else {
@@ -64,14 +64,14 @@ struct Word2Vec {
     return dimensionsCount;
   }
 
-  bool read(BufferedReader &file, Transformation &result) {
+  bool read(const std::unique_ptr<BufferedReader> &file, Transformation &result) {
     memset(&result, -1, sizeof(Transformation));
-    int32_t read = file.read(&result, sizeof(Transformation), 1);
-    if (read != 1 && file.eof()) {
+    int32_t read = file->read(&result, sizeof(Transformation), 1);
+    if (read != 1 && file->eof()) {
       return false;
     }
     if (read != 1) {
-      LOGGER() << "EOF: " << file.eof() << std::endl;
+      LOGGER() << "EOF: " << file->eof() << std::endl;
       LOGGER() << "Read " << read << std::endl;
       perror("");
       throw std::runtime_error("IO exception");

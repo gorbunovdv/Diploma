@@ -53,9 +53,9 @@ private:
   }
 
   static void sortFiles(std::vector<std::string> files, std::string destPath, const std::shared_ptr<Word2Vec> &word2vec) {
-    std::vector<BufferedReader> openedFiles(len(files));
+    std::vector<std::unique_ptr<BufferedReader>> openedFiles;
     for (int32_t i = 0; i < len(files); i++) {
-      openedFiles[i] = BufferedReader(files[i]);
+      openedFiles.push_back(std::make_unique<BufferedReader>(files[i]));
     }
     std::vector<std::pair<Transformation, bool>> lastTransformation(len(files), std::make_pair(Transformation(), false));
     std::vector<std::pair<int64_t, int64_t>> hashes(len(files));
@@ -64,7 +64,7 @@ private:
     for (;;) {
       int32_t best = -1;
       for (int32_t i = 0; i < len(files); i++) {
-        if (!lastTransformation[i].second && !openedFiles[i].eof()) {
+        if (!lastTransformation[i].second && !openedFiles[i]->eof()) {
           if (!word2vec->read(openedFiles[i], lastTransformation[i].first)) {
             continue;
           }
@@ -85,9 +85,9 @@ private:
 
   static void sortFile(std::string sourceFile, std::string destFile, const std::shared_ptr<Word2Vec> &word2vec) {
     LOGGER() << "Sorting file " << sourceFile << " into " << destFile << std::endl;
-    BufferedReader fin(sourceFile);
+    auto fin = std::make_unique<BufferedReader>(sourceFile);
     std::vector<std::pair<std::pair<int64_t, int64_t>, Transformation>> transformations;
-    while (!fin.eof()) {
+    while (!fin->eof()) {
       Transformation transformation;
       if (!word2vec->read(fin, transformation)) {
         continue;

@@ -41,21 +41,21 @@ public:
   }
 
   bool next(Transformation &result) {
-    while (!current_file.isDefined() || current_file.eof()) {
-      if (current_file.isDefined() && current_file.eof()) {
-        current_file = BufferedReader();
+    while (!current_file->isDefined() || current_file->eof()) {
+      if (current_file->isDefined() && current_file->eof()) {
+        current_file = std::make_unique<BufferedReader>();
       }
       if (files.empty()) {
         return false;
       }
       std::string next_file = files.front();
       files.pop_front();
-      current_file = BufferedReader(next_file);
+      current_file = std::make_unique<BufferedReader>(next_file);
     }
     if (word2vec->read(current_file, result)) {
       return true;
     }
-    if (current_file.eof() && !files.empty()) {
+    if (current_file->eof() && !files.empty()) {
       return next(result);
     }
     return false;
@@ -92,7 +92,7 @@ public:
 
 private:
   std::deque<std::string> files;
-  BufferedReader current_file;
+  std::unique_ptr<BufferedReader> current_file = std::make_unique<BufferedReader>();
   const std::shared_ptr<Word2Vec> word2vec;
 };
 

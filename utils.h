@@ -23,6 +23,9 @@ public:
   BufferedReader() = default;
 
   ~BufferedReader() {
+    if (!defined) {
+      return ;
+    }
     delete[] buffer;
     fclose(file);
     LOGGER() << "Closed file " << file << std::endl;
@@ -59,15 +62,15 @@ public:
   }
 
   bool eof() {
-    return feof(file);
+    return position == real_size && feof(file);
   }
 
 private:
-  FilePointer file;
+  FilePointer file = nullptr;
   char *buffer;
   int32_t position = 0, real_size = 0;
   bool defined = false;
-  static constexpr int32_t buffer_size = 65536;
+  static constexpr int32_t buffer_size = 4194304;
 };
 
 #endif //DIPLOMA_UTILS_H

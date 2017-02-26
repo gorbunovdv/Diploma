@@ -26,10 +26,10 @@ int main(int argc, char **argv) {
   init_config(configFile);
   auto word2vecModelPath = config["word2vec"]["path"].asString();
   LOGGER() << "Using " << config["word2vec"]["model"].asString() << " as Word2Vec model" << std::endl;
-  BufferedReader model(word2vecModelPath);
+  auto model = std::make_unique<BufferedReader>(word2vecModelPath);
   auto word2vec = std::make_shared<Word2Vec>(model);
   RoyalManager royal_manager(word2vec);
   royal_manager.run();
-  LOGGER() << "END!";
+  LOGGER() << "END!" << std::endl;
   return 0;
 }
