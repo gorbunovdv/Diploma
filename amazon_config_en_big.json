@@ -1,0 +1,23 @@
+{
+  "word2vec" : {
+    "model" : "corpus_en.norm-sz100-w8-cb1-it1-min20",
+    "path" : "/home/ubuntu/corpus_en.norm-sz100-w8-cb0-it1-min20.w2v",
+    "valid_letters": "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM-"
+  },
+  "transformations_iterator" : {
+    "max_transformations_count_in_file" : 60000000
+  },
+  "parameters" : {
+    "transformations_build" : {
+      "remove_add_symbols_count" : 3,
+      "total_changes_count" : 6,
+      "use_shortest_transformations" : true,
+      "result_path": "/home/ubuntu/Diploma/results/transformations_build"
+    },
+    "transformations_filter": {
+      "sorted_each_path": "/home/ubuntu/Diploma/results/sorted_each",
+      "sorted_path": "/home/ubuntu/Diploma/results/sorted",
+      "filtered_path": "/home/ubuntu/Diploma/results/filtered"
+    }
+  }
+}
