@@ -20,11 +20,11 @@ public:
     auto files = TransformationsReader::getFiles(sourcePath);
     for (auto &sourceFile : files) {
       auto destFile = destPath + sourceFile.substr(sourcePath.size());
-      //sortFile(sourceFile, destFile, word2vec);
+      sortFile(sourceFile, destFile, word2vec);
       sourceFile = destFile;
     }
     auto destSortedPath = config["parameters"]["transformations_filter"]["sorted_path"].asString();
-    //sortFiles(files, destSortedPath, word2vec);
+    sortFiles(files, destSortedPath, word2vec);
     auto destFilteredPath = config["parameters"]["transformations_filter"]["filtered_path"].asString();
     filterTransformations(word2vec, destSortedPath, destFilteredPath);
   }
