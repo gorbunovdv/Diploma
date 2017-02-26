@@ -4,9 +4,17 @@
 
 using namespace std;
 
+void check_modes() {
+  LOGGER() << "Using " << PROCESSES_COUNT << " jobs" << std::endl;
+#ifdef DEBUG_TRANSFORMATIONS
+  LOGGER() << "Validate transformations mode on" << std::endl;
+#endif
+}
+
 int main(int argc, char **argv) {
   setlocale(LC_ALL, "Russian");
   srand(-1);
+  check_modes();
   if (argc != 2) {
     std::cerr << "Usage " << argv[0] << ": <path_to_config>" << std::endl;
     return 1;
@@ -17,6 +25,7 @@ int main(int argc, char **argv) {
   }
   init_config(configFile);
   auto word2vecModelPath = config["word2vec"]["path"].asString();
+  LOGGER() << "Using " << config["word2vec"]["model"].asString() << " as Word2Vec model" << std::endl;
   FilePointer model = fopen(word2vecModelPath.data(), "r");
   if (model == nullptr) {
     throw std::runtime_error("Word2Vec model " + word2vecModelPath + " could not be opened");

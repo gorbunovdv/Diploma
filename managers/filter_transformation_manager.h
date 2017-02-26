@@ -25,10 +25,47 @@ public:
     }
     auto destSortedPath = config["parameters"]["transformations_filter"]["sorted_path"].asString();
     sortFiles(files, destSortedPath, word2vec);
+    auto destFilteredPath = config["parameters"]["transformations_filter"]["filtered_path"].asString();
+    filterTransformations(word2vec, destSortedPath, destFilteredPath);
   }
 
 private:
-  static void sortFiles(auto files, std::string destPath, const std::shared_ptr<Word2Vec> &word2vec) {
+  static void filterTransformations(const std::shared_ptr<Word2Vec> &word2vec, std::string sourcePath, std::string destPath) {
+    LOGGER() << "Filtering transformation classes" << std::endl;
+    int32_t min_transformations_in_class = config["parameters"]["transformations_filter"]["min_transformations_in_class"].asInt();
+    TransformationsReader reader(sourcePath, word2vec);
+    TransformationsWriter writer(destPath, word2vec);
+    std::vector<Transformation> current;
+    std::pair<int64_t, int64_t> currentHash;
+    int32_t transformationClasses = 0, transformations = 0;
+    reader.foreach([&transformationClasses, &transformations, &writer, &current, &currentHash, &word2vec, min_transformations_in_class](const Transformation &transformation) {
+      const std::pair<int64_t, int64_t> transformationHash = transformation.hash(word2vec);
+      if (len(current) == 0 || currentHash == transformationHash) {
+        currentHash = transformationHash;
+        current.push_back(transformation);
+      } else {
+        if (FilterTransformationManager::validTransformationClass(current, min_transformations_in_class)) {
+          writer.write(current);
+          transformationClasses++;
+          transformations += len(current);
+          for (auto transformation1 : current) {
+            transformation1.print(word2vec);
+          }
+        }
+        current = { transformation };
+        currentHash = transformationHash;
+      }
+    });
+    LOGGER() << transformationClasses << " transformation classes after filtering" << std::endl;
+    LOGGER() << transformations << " transformations after filtering" << std::endl;
+  }
+
+  static bool validTransformationClass(const std::vector<Transformation> &transformationClass, int32_t min_transformations_in_class) {
+    return len(transformationClass) >= min_transformations_in_class;
+  }
+
+  template<typename Files>
+  static void sortFiles(Files files, std::string destPath, const std::shared_ptr<Word2Vec> &word2vec) {
     std::vector<FilePointer> openedFiles(len(files));
     for (int32_t i = 0; i < len(files); i++) {
       openedFiles[i] = fopen(files[i].data(), "r");
@@ -44,7 +81,9 @@ private:
       int32_t best = -1;
       for (int32_t i = 0; i < len(files); i++) {
         if (!lastTransformation[i].second && !feof(openedFiles[i])) {
-          lastTransformation[i].first = word2vec->read(openedFiles[i]);
+          if (!word2vec->read(openedFiles[i], lastTransformation[i].first)) {
+            continue;
+          }
           lastTransformation[i].second = true;
           hashes[i] = lastTransformation[i].first.hash(word2vec);
         }
@@ -56,7 +95,6 @@ private:
         break;
       }
       writer.write(lastTransformation[best].first);
-      RESULT() << lastTransformation[best].first.getClass(word2vec) << std::endl;
       lastTransformation[best].second = false;
     }
     for (FilePointer file : openedFiles) {
@@ -72,7 +110,10 @@ private:
     }
     std::vector<std::pair<std::pair<int64_t, int64_t>, Transformation>> transformations;
     while (!feof(fin)) {
-      auto transformation = word2vec->read(fin);
+      Transformation transformation;
+      if (!word2vec->read(fin, transformation)) {
+        continue;
+      }
       transformations.push_back(std::make_pair(transformation.hash(word2vec), transformation));
     }
     fclose(fin);

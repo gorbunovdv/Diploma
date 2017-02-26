@@ -42,6 +42,7 @@ public:
   bool next(Transformation &result) {
     while (current_file == nullptr || feof(current_file)) {
       if (current_file != nullptr && feof(current_file)) {
+        current_file = nullptr;
         fclose(current_file);
       }
       if (files.empty()) {
@@ -54,8 +55,15 @@ public:
         throw std::runtime_error("Failed to open file " + next_file);
       }
     }
-    result = word2vec->read(current_file);
-    return true;
+    return word2vec->read(current_file, result);
+  }
+
+  template<typename Operator>
+  void foreach(Operator anOperator) {
+    Transformation currentTransformation;
+    while (next(currentTransformation)) {
+      anOperator(currentTransformation);
+    }
   }
 
 private:
@@ -82,8 +90,24 @@ public:
     word2vec->write(current_file, transformation);
   }
 
+  template<typename Iterator>
+  void write(Iterator begin, const Iterator &end) {
+    while (begin != end) {
+      write(*begin);
+      begin++;
+    }
+  }
+
+  template<typename Container>
+  void write(const Container &container) {
+    for (auto i : container) {
+      write(i);
+    }
+  }
+
   ~TransformationsWriter() {
     if (current_file != nullptr) {
+      LOGGER() << "Closed " << current_file_path << std::endl;
       fclose(current_file);
     }
   }
@@ -102,6 +126,7 @@ private:
   void createNextFile() {
     current_transformation_number = 1;
     if (current_file != nullptr) {
+      LOGGER() << "Closed " << current_file_path << std::endl;
       fclose(current_file);
     }
     current_file_number++;
@@ -110,6 +135,7 @@ private:
     if (current_file == nullptr) {
       throw std::runtime_error("Failed to open file " + next_file_path + " for write");
     }
+    current_file_path = next_file_path;
   }
 
   std::string path;
@@ -117,6 +143,7 @@ private:
   int32_t current_file_number = 0, current_transformation_number = 0;
   int32_t max_transformations_count_in_file;
   const std::shared_ptr<Word2Vec> word2vec;
+  std::string current_file_path;
 };
 
 #endif //DIPLOMA_TRANSFORMATIONS_ITERATOR_H

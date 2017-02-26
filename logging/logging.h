@@ -28,9 +28,9 @@ public:
   }
 
 private:
+  std::string ticker;
   int32_t max_ticks;
   int32_t current_ticks = 0;
-  std::string ticker;
 };
 
 #endif //DIPLOMA_LOGGING_H

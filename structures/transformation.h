@@ -22,6 +22,18 @@ public:
 
   template<typename Word2Vec>
   bool validate(const Word2Vec &word2vec) const {
+    if (type != PREFIX && type != SUFFIX) {
+      LOGGER() << "Error during validation: not PREFIX, not SUFFIX" << std::endl;
+      return false;
+    }
+    if (from_word < 0 || from_word > len(word2vec->index2word)) {
+      LOGGER() << "Error during validation: " << from_word << " is not a valid index of word" << std::endl;
+      return false;
+    }
+    if (to_word < 0 || to_word > len(word2vec->index2word)) {
+      LOGGER() << "Error during validation: " << from_word << " is not a valid index of word" << std::endl;
+      return false;
+    }
     auto from_vocab = word2vec->index2word[from_word]->word;
     auto to_vocab = word2vec->index2word[to_word]->word;
     if (type == PREFIX) {
@@ -72,7 +84,7 @@ public:
   }
 
   template<typename Word2Vec>
-  std::pair<int64_t, int64_t> hash(const std::shared_ptr<Word2Vec> &word2vec) {
+  std::pair<int64_t, int64_t> hash(const std::shared_ptr<Word2Vec> &word2vec) const {
     utf_string clazz = getClass(word2vec);
     std::pair<int64_t, int64_t> hashResult(0, 0);
     for (auto c : clazz) {

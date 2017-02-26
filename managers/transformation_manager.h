@@ -21,9 +21,9 @@ class TransformationManager {
 public:
   static void getAllTransformations(const std::shared_ptr<Word2Vec> &word2vec) {
     TransformationsWriter writer(config["parameters"]["transformations_build"]["result_path"].asString(), word2vec);
-    LOGGER() << "Building SUFFIX tranformations" << std::endl;
+    LOGGER() << "Building SUFFIX transformations" << std::endl;
     TransformationManager::getAllTransformationsInternal(word2vec, Transformation::SUFFIX, writer);
-    LOGGER() << "Building PREFIX tranformations" << std::endl;
+    LOGGER() << "Building PREFIX transformations" << std::endl;
     TransformationManager::getAllTransformationsInternal(word2vec, Transformation::PREFIX, writer);
   }
 
@@ -50,7 +50,6 @@ public:
     std::vector<Transformation> transformations;
     bool useShortestTransformations = config["parameters"]["transformations_build"]["use_shortest_transformations"].asBool();
     int32_t count = 0;
-    int32_t files_count = config["parameters"]["transformations_build"]["files_count"].asInt();
     for (auto node : trie->nodes) {
       std::vector<std::tuple<int, int32_t>> rootTuples;
       for (auto end : node->ends) {

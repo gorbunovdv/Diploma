@@ -1,7 +1,7 @@
 {
   "word2vec" : {
-    "model" : "corpus_en.norm-sz100-w8-cb1-it1-min20",
-    "path" : "/Users/gorbunovdv/Downloads/corpus_en.norm-sz100-w8-cb0-it1-min20.w2v",
+    "model" : "vectors",
+    "path" : "/Users/gorbunovdv/Mega/word2vec/trunk/vectors.bin",
     "valid_letters": "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM-"
   },
   "transformations_iterator" : {

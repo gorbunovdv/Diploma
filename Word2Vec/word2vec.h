@@ -62,10 +62,14 @@ struct Word2Vec {
     return dimensionsCount;
   }
 
-  Transformation read(FilePointer &file) {
-    static Transformation result;
+  bool read(FilePointer &file, Transformation &result) {
+    memset(&result, -1, sizeof(Transformation));
     int32_t read = fread(&result, sizeof(Transformation), 1, file);
+    if (read != 1 && feof(file)) {
+      return false;
+    }
     if (read != 1) {
+      LOGGER() << "EOF: " << feof(file) << std::endl;
       LOGGER() << "Read " << read << std::endl;
       perror("");
       throw std::runtime_error("IO exception");
@@ -75,7 +79,7 @@ struct Word2Vec {
       throw std::runtime_error("Validation failed");
     }
 #endif
-    return result;
+    return true;
   }
 
   void write(FilePointer &file, Transformation transformation) {
