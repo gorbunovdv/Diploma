@@ -55,7 +55,13 @@ public:
         throw std::runtime_error("Failed to open file " + next_file);
       }
     }
-    return word2vec->read(current_file, result);
+    if (word2vec->read(current_file, result)) {
+      return true;
+    }
+    if (feof(current_file) && !files.empty()) {
+      return next(result);
+    }
+    return false;
   }
 
   template<typename Operator>
@@ -63,6 +69,27 @@ public:
     Transformation currentTransformation;
     while (next(currentTransformation)) {
       anOperator(currentTransformation);
+    }
+  }
+
+  template<typename Operator>
+  void foreachClass(const std::shared_ptr<Word2Vec> &word2vec, Operator anOperator) {
+    std::pair<int64_t, int64_t> currentHash;
+    std::vector<Transformation> current;
+    Transformation currentTransformation;
+    while (next(currentTransformation)) {
+      const std::pair<int64_t, int64_t> currentTransformationHash = currentTransformation.hash(word2vec);
+      if (len(current) == 0 || currentHash == currentTransformationHash) {
+        current.push_back(currentTransformation);
+        currentHash = currentTransformationHash;
+      } else {
+        anOperator(current);
+        current = { currentTransformation };
+        currentHash = currentTransformationHash;
+      }
+    }
+    if (len(current) > 0) {
+      anOperator(current);
     }
   }
 

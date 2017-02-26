@@ -15,7 +15,7 @@ public:
   RoyalManager(std::shared_ptr<Word2Vec> word2vec) : word2vec(word2vec) { }
 
   void run() {
-    TransformationManager::getAllTransformations(word2vec);
+    //TransformationManager::getAllTransformations(word2vec);
     FilterTransformationManager::filterAllTransformations(word2vec);
   }
 

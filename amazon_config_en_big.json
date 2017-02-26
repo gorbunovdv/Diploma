@@ -17,7 +17,8 @@
     "transformations_filter": {
       "sorted_each_path": "/home/ubuntu/Diploma/results/sorted_each",
       "sorted_path": "/home/ubuntu/Diploma/results/sorted",
-      "filtered_path": "/home/ubuntu/Diploma/results/filtered"
+      "filtered_path": "/home/ubuntu/Diploma/results/filtered",
+      "min_transformations_in_class": 10
     }
   }
 }
