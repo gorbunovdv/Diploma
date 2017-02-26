@@ -12,7 +12,10 @@ std::ofstream ____result("result.txt");
 
 auto start = std::chrono::high_resolution_clock::now();
 
-#define LOGGER() std::cerr << std::fixed << "[" << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count() / 1000.0 << "]: "
+#define LOGGER() std::cerr << std::fixed << "[" << \
+std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count() \
+ / 1000.0 << "] -> " \
+<< "(" << __FUNCTION__ << "): "
 #define RESULT() ____result
 
 class Ticker {
