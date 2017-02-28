@@ -37,15 +37,18 @@ private:
     TransformationsReader reader(sourcePath, word2vec);
     TransformationsWriter writer(destPath, word2vec);
     int32_t transformationClasses = 0, transformations = 0;
-    reader.foreachClass(word2vec, [&min_transformations_in_class, &writer, &transformationClasses, &transformations](const std::vector<Transformation> &transformationClass){
+    int32_t largestTransformationClass = 0;
+    reader.foreachClass(word2vec, [&largestTransformationClass, &min_transformations_in_class, &writer, &transformationClasses, &transformations](const std::vector<Transformation> &transformationClass){
       if (FilterTransformationManager::validTransformationClass(transformationClass, min_transformations_in_class)) {
         writer.write(transformationClass);
         transformationClasses++;
         transformations += len(transformationClass);
+        largestTransformationClass = std::max(largestTransformationClass, len(transformationClass));
       }
     });
     LOGGER() << transformationClasses << " transformation classes after filtering" << std::endl;
     LOGGER() << transformations << " transformations after filtering" << std::endl;
+    LOGGER() << "Largest class contains: " << largestTransformationClass << std::endl;
   }
 
   static bool validTransformationClass(const std::vector<Transformation> &transformationClass, int32_t min_transformations_in_class) {
