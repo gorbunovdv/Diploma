@@ -9,6 +9,7 @@
 #include <chrono>
 
 std::ofstream ____result("result.txt");
+std::ofstream ____result2("result2.txt");
 
 auto start = std::chrono::high_resolution_clock::now();
 
@@ -17,6 +18,7 @@ std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resoluti
  / 1000.0 << "] -> " \
 << "(" << __FUNCTION__ << "): "
 #define RESULT() ____result
+#define RESULT2() ____result2
 
 class Ticker {
 public:

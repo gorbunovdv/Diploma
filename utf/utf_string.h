@@ -44,6 +44,10 @@ public:
     return stream << utf_string.to_string();
   }
 
+  friend std::ofstream& operator << (std::ofstream &stream, const utf_string &utf_string) {
+    return stream << utf_string.to_string();
+  }
+
   friend bool operator < (const utf_string &a, const utf_string &b) {
     return a.utf32line < b.utf32line;
   }
