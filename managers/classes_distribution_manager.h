@@ -14,9 +14,9 @@ class ClassesDistributionManager {
 public:
   ClassesDistributionManager(std::string path, const std::shared_ptr<Word2Vec> &word2vec) {
     TransformationsReader reader(path, word2vec);
-    reader.foreachClass(word2vec, [&classesDistribution, &word2vec](const std::vector<Transformation> &transformations){
-      RESULT() << transformations.back().getClass(word2vec) << " : " << len(transformations);
-      classesDistribution[len(transformations)]++;
+    reader.foreachClass(word2vec, [this, &word2vec](const std::vector<Transformation> &transformations){
+      RESULT() << transformations.back().getClass(word2vec) << " : " << len(transformations) << std::endl;
+      this->classesDistribution[len(transformations)]++;
     });
     for (auto i : classesDistribution) {
       RESULT2() << i.first << " : " << i.second << std::endl;
