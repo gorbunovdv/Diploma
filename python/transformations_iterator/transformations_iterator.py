@@ -2,7 +2,10 @@ import struct
 from os import listdir
 from os.path import isfile, join
 
+from python.logger.logger import Logger
 from python.structures.transformation import Transformation
+
+logger = Logger("TransformationReader")
 
 
 class TransformationsReader:
@@ -18,6 +21,7 @@ class TransformationsReader:
 
     def generate(self):
         for file in self.files:
+            logger.info("Reading file {}".format(file))
             with open(file) as fin:
                 while True:
                     try:

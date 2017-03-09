@@ -6,6 +6,9 @@ from gensim.models.word2vec_inner import REAL
 from gensim import utils
 
 from python.config.config import config
+from python.logger.logger import Logger
+
+logger = Logger("Word2Vec")
 
 
 class Vocab:
@@ -31,7 +34,7 @@ class Word2Vec:
                 if not self.check_if_word_is_valid(cur.word, letters_set):
                     add_word = False
             except Exception, e:
-                print "UTF encoding failed: skipping word"
+                logger.info("UTF encoding failed: skipping word")
                 add_word = False
             cur.syn0 = numpy.fromstring(fin.read(binary_length), dtype=REAL)
             if add_word:
@@ -41,8 +44,8 @@ class Word2Vec:
                 self.words_count -= 1
                 deleted_words += 1
             i += 1
-        print "Deleted {} words".format(deleted_words)
-        print "{} words in model".format(self.words_count)
+        logger.info("Deleted {} words".format(deleted_words))
+        logger.info("{} words in model".format(self.words_count))
 
     @staticmethod
     def check_if_word_is_valid(word, letters_set):
