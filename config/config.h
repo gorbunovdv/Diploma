@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <json/json.h>
+#include <jsoncpp/json/json.h>
 
 Json::Value config;
 

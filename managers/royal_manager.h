@@ -10,7 +10,6 @@
 #include "transformation_manager.h"
 #include "filter_transformation_manager.h"
 #include "classes_distribution_manager.h"
-#include "nearest_points_calculator.h"
 
 class RoyalManager {
 public:
@@ -20,7 +19,6 @@ public:
     /*TransformationManager::getAllTransformations(word2vec);
     FilterTransformationManager::filterAllTransformations(word2vec);*/
     ClassesDistributionManager(config["parameters"]["transformations_filter"]["filtered_path"].asString(), word2vec);
-    NearestPointsCalculator::testArmadillo();
   }
 
 private:

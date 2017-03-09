@@ -74,12 +74,16 @@ public:
     std::pair<int64_t, int64_t> currentHash;
     std::vector<Transformation> current;
     Transformation currentTransformation;
+    int32_t iteration = 0;
     while (next(currentTransformation)) {
       const std::pair<int64_t, int64_t> currentTransformationHash = currentTransformation.hash(word2vec);
       if (len(current) == 0 || currentHash == currentTransformationHash) {
         current.push_back(currentTransformation);
         currentHash = currentTransformationHash;
       } else {
+        if ((++iteration & ((1 << 20) - 1)) == 0) {
+          LOGGER() << "Read " << iteration << " classes" << std::endl;
+        }
         anOperator(current);
         current = { currentTransformation };
         currentHash = currentTransformationHash;
