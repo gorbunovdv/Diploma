@@ -1,24 +1,31 @@
 {
   "word2vec" : {
     "model" : "corpus_en.norm-sz100-w8-cb1-it1-min20",
-    "path" : "/Users/gorbunovdv/Downloads/corpus_en.norm-sz100-w8-cb0-it1-min20.w2v",
+    "path" : "/home/dgorbunov/Downloads/corpus_en.norm-sz100-w8-cb1-it1-min20.w2v",
     "valid_letters": "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM-"
   },
   "transformations_iterator" : {
-    "max_transformations_count_in_file" : 20000000
+    "max_transformations_count_in_file" : 10000000
   },
   "parameters" : {
     "transformations_build" : {
       "remove_add_symbols_count" : 3,
-      "total_changes_count" : 4,
+      "total_changes_count" : 3,
       "use_shortest_transformations" : true,
-      "result_path": "/Users/gorbunovdv/ClionProjects/Diploma/results/transformations_build"
+      "result_path": "/home/dgorbunov/Documents/Diploma/results/transformations_build"
     },
     "transformations_filter": {
-      "sorted_each_path": "/Users/gorbunovdv/ClionProjects/Diploma/results/sorted_each",
-      "sorted_path": "/Users/gorbunovdv/ClionProjects/Diploma/results/sorted",
-      "filtered_path": "/Users/gorbunovdv/ClionProjects/Diploma/results/filtered",
+      "sorted_each_path": "/home/dgorbunov/Documents/Diploma/results/sorted_each",
+      "sorted_path": "/home/dgorbunov/Documents/Diploma/results/sorted",
+      "filtered_path": "/home/dgorbunov/Documents/Diploma/results/filtered",
       "min_transformations_in_class": 10
+    },
+    "nearest_neighbours": {
+      "topk": 50,
+      "path": "/home/dgorbunov/Documents/Diploma/results/nearest_neighbours/result.txt"
+    },
+    "morphological_transformations_build": {
+      "path": "/home/dgorbunov/Documents/Diploma/results/morphological_transformations"
     }
   }
 }
