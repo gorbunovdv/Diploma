@@ -7,5 +7,5 @@ class RoyalManager:
         self.word2vec = word2vec
 
     def run(self):
-        #NearestNeighboursManager.calculate_nearest_neighbours(self.word2vec)
+        # NearestNeighboursManager.calculate_nearest_neighbours(self.word2vec)
         MorphologicalTransformationManager.calculate_morphological_transformations(self.word2vec)

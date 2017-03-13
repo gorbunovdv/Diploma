@@ -21,12 +21,12 @@ class Ticker:
 
     def __call__(self):
         self.current_ticks += 1
-        if self.current_ticks % (self.max_ticks // 1000) == 0:
+        if (self.max_ticks == 0 and self.current_ticks % 10000 == 0) or (self.max_ticks != 0 and self.current_ticks % (self.max_ticks // 1000) == 0):
             self.log()
 
     def log(self):
         seconds = (datetime.now() - self.start_time).total_seconds()
-        if self.max_ticks is not None:
+        if self.max_ticks != 0:
             self.logger.info("[{}]: {}/{} ticks are finished ({} per second, one in {} seconds, estimated time is {} seconds)"
                              .format(self.name, self.current_ticks, self.max_ticks,
                                      1. * self.current_ticks / seconds, 1. * seconds / self.current_ticks,

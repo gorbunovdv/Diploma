@@ -25,7 +25,9 @@
       "path": "/home/dgorbunov/Documents/Diploma/results/nearest_neighbours/result.txt"
     },
     "morphological_transformations_build": {
-      "path": "/home/dgorbunov/Documents/Diploma/results/morphological_transformations"
+      "path": "/home/dgorbunov/Documents/Diploma/results/morphological_transformations",
+      "min_cos": 0.5,
+      "max_rank": 30
     }
   }
 }
