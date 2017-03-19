@@ -1,3 +1,5 @@
+from random import shuffle
+
 import numpy
 
 from python.config.config import config
@@ -13,6 +15,7 @@ class MorphologicalTransformationManager:
         fout = open(config["parameters"]["morphological_transformations_build"]["path"] + "/result.txt", "w")
         reader = TransformationsReader(config["parameters"]["transformations_filter"]["filtered_path"])
         classTicker = Ticker(logger, 0, "classTicker")
+        classTicker2 = Ticker(logger, 0, "splitClassTicker")
         syn0norm = numpy.array(word2vec.syn0, copy=True)
         syn0norm /= numpy.linalg.norm(syn0norm, axis=1)[:, numpy.newaxis]
         min_cos = float(config["parameters"]["morphological_transformations_build"]["min_cos"])
@@ -20,8 +23,16 @@ class MorphologicalTransformationManager:
         nearest_neighbours = NearestNeighboursManager.load_nearest_neighbours(word2vec)[:,max_rank]
         for i in range(len(nearest_neighbours)):
             nearest_neighbours[i] = max(nearest_neighbours[i], min_cos)
+        PIECE = 5000
         for clazz in reader.foreachClass(word2vec):
-            cls.process_class(clazz, word2vec, syn0norm, fout, nearest_neighbours)
+            shuffle(clazz)
+            split_count = (len(clazz) + PIECE - 1) / PIECE
+            for i in range(split_count):
+                l, r = max(0, min(i * PIECE, len(clazz) - PIECE)), min(len(clazz), (i + 1) * PIECE)
+                cls.process_class(clazz[l:r], word2vec, syn0norm, fout, nearest_neighbours)
+                classTicker2()
+            if split_count > 1:
+                logger.info("Split class with size {} into {} pieces".format(len(clazz), split_count))
             classTicker()
         fout.close()
 
@@ -38,5 +49,4 @@ class MorphologicalTransformationManager:
             indices, = numpy.where(C >= threshold)
             for index in indices:
                 if index != i:
-                    fout.write("%s -> %s (%s -> %s): %.3f\n" % (word2vec.index2word[clazz[index].from_word].word, word2vec.index2word[clazz[index].to_word].word,
-                                               word2vec.index2word[clazz[i].from_word].word, word2vec.index2word[clazz[i].to_word].word, C[index]))
+                    fout.write("%d %d %d %d\n" % (clazz[index].from_word, clazz[index].to_word, clazz[i].from_word, clazz[i].to_word))

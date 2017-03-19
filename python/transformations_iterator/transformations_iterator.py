@@ -2,6 +2,8 @@ import struct
 from os import listdir
 from os.path import isfile, join
 
+import io
+
 from python.logger.logger import Logger
 from python.structures.transformation import Transformation
 
