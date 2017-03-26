@@ -9,6 +9,7 @@ from python.transformations_iterator.transformations_iterator import Transformat
 
 logger = Logger("MorphologicalTransformationManager")
 
+
 class MorphologicalTransformationManager:
     @classmethod
     def calculate_morphological_transformations(cls, word2vec):
@@ -20,7 +21,7 @@ class MorphologicalTransformationManager:
         syn0norm /= numpy.linalg.norm(syn0norm, axis=1)[:, numpy.newaxis]
         min_cos = float(config["parameters"]["morphological_transformations_build"]["min_cos"])
         max_rank = int(config["parameters"]["morphological_transformations_build"]["max_rank"])
-        nearest_neighbours = NearestNeighboursManager.load_nearest_neighbours(word2vec)[:,max_rank]
+        nearest_neighbours = NearestNeighboursManager.load_nearest_neighbours(word2vec)[:, max_rank]
         for i in range(len(nearest_neighbours)):
             nearest_neighbours[i] = max(nearest_neighbours[i], min_cos)
         PIECE = 5000
@@ -45,7 +46,7 @@ class MorphologicalTransformationManager:
             delta = syn0norm[clazz[i].to_word] - syn0norm[clazz[i].from_word]
             A += delta
             A /= numpy.linalg.norm(A, axis=1)[:, numpy.newaxis]
-            C = (A*B).sum(1)
+            C = (A * B).sum(1)
             indices, = numpy.where(C >= threshold)
             for index in indices:
                 if index != i:
