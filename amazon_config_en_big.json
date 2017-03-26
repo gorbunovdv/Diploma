@@ -1,7 +1,7 @@
 {
   "word2vec" : {
-    "model" : "corpus_en.norm-sz100-w8-cb1-it1-min20",
-    "path" : "/mnt/mount/Diploma/corpus_en.norm-sz100-w8-cb0-it1-min20.w2v",
+    "model" : "all.norm-sz100-w10-cb0-it1-min100.w2v",
+    "path" : "/mnt/mount/Diploma/all.norm-sz100-w10-cb0-it1-min100.w2v",
     "valid_letters": "йцукенгшщзфывапролдячсмитьёЁЙЦУКЕНГШЩЗФЫВАПРОЛДЯЧСМИТЬ-"
   },
   "transformations_iterator" : {
