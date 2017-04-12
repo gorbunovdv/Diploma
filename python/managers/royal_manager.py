@@ -1,3 +1,4 @@
+from python.managers.acyclic_graph_manager import AcyclicGraphManager
 from python.managers.morphological_transformation_manager import MorphologicalTransformationManager
 from python.managers.nearest_neighbours_manager import NearestNeighboursManager
 
@@ -8,4 +9,5 @@ class RoyalManager:
 
     def run(self):
         # NearestNeighboursManager.calculate_nearest_neighbours(self.word2vec)
-        MorphologicalTransformationManager.calculate_morphological_transformations(self.word2vec)
+        # MorphologicalTransformationManager.calculate_morphological_transformations(self.word2vec)
+        AcyclicGraphManager.calculate_acyclic_graph(self.word2vec)
