@@ -1,4 +1,3 @@
-import multiprocessing
 import numpy
 
 from python.config.config import config

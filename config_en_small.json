@@ -1,24 +1,36 @@
 {
   "word2vec" : {
-    "model" : "vectors",
-    "path" : "/Users/gorbunovdv/Mega/word2vec/trunk/vectors.bin",
+    "model" : "vectors.bin",
+    "path" : "/home/dgorbunov/Downloads/word2vec/trunk/vectors.bin",
     "valid_letters": "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM-"
   },
   "transformations_iterator" : {
-    "max_transformations_count_in_file" : 20000000
+    "max_transformations_count_in_file" : 10000000
   },
   "parameters" : {
     "transformations_build" : {
       "remove_add_symbols_count" : 3,
-      "total_changes_count" : 3,
+      "total_changes_count" : 6,
       "use_shortest_transformations" : true,
-      "result_path": "/Users/gorbunovdv/ClionProjects/Diploma/results/transformations_build"
+      "result_path": "/home/dgorbunov/Documents/Diploma/results_ru_small/transformations_build"
     },
     "transformations_filter": {
-      "sorted_each_path": "/Users/gorbunovdv/ClionProjects/Diploma/results/sorted_each",
-      "sorted_path": "/Users/gorbunovdv/ClionProjects/Diploma/results/sorted",
-      "filtered_path": "/Users/gorbunovdv/ClionProjects/Diploma/results/filtered",
+      "sorted_each_path": "/home/dgorbunov/Documents/Diploma/results_ru_small/sorted_each",
+      "sorted_path": "/home/dgorbunov/Documents/Diploma/results_ru_small/sorted",
+      "filtered_path": "/home/dgorbunov/Documents/Diploma/results_ru_small/filtered",
       "min_transformations_in_class": 10
+    },
+    "nearest_neighbours": {
+      "topk": 50,
+      "path": "/home/dgorbunov/Documents/Diploma/results_ru_small/nearest_neighbours/result.txt"
+    },
+    "morphological_transformations_build": {
+      "path": "/home/dgorbunov/Documents/Diploma/results_ru_small/morphological_transformations",
+      "min_cos": 0.5,
+      "max_rank": 30
+    },
+    "acyclic_graph": {
+      "path": "/home/dgorbunov/Documents/Diploma/results_ru_small/acyclic_graph"
     }
   }
 }

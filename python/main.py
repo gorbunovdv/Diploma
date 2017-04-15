@@ -12,8 +12,6 @@ logger.info("Using {} as a Word2Vec model".format(model_name))
 with open(model_path, "r") as fin:
     word2vec = Word2Vec(fin)
 
-# NearestNeighboursManager.calculate_nearest_neighbours(word2vec)
-
 #reader = TransformationsReader("/home/dgorbunov/Documents/Diploma/results_config_ru_big_3/filtered")
 #for clazz in reader.foreachClass(word2vec):
 #    for element in clazz:

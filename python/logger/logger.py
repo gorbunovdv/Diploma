@@ -1,4 +1,5 @@
 import time
+import multiprocessing
 
 from datetime import datetime
 
@@ -10,19 +11,24 @@ class Logger:
     def info(self, message):
         print("{}: [{}] -> {}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()), self.name, message))
 
+
 class Ticker:
-    def __init__(self, logger, max_ticks, name):
+    lock = multiprocessing.Lock()
+
+    def __init__(self, logger, max_ticks, name, step=10000):
         self.logger = logger
         self.max_ticks = max_ticks
         self.name = name
 
         self.current_ticks = 0
         self.start_time = datetime.now()
+        self.step = step
 
     def __call__(self):
-        self.current_ticks += 1
-        if (self.max_ticks == 0 and self.current_ticks % 10000 == 0) or (self.max_ticks != 0 and self.current_ticks % (self.max_ticks // 1000) == 0):
-            self.log()
+        with self.lock:
+            self.current_ticks += 1
+            if (self.max_ticks == 0 and self.current_ticks % self.step == 0) or (self.max_ticks != 0 and self.current_ticks % (self.max_ticks // 1000) == 0):
+                self.log()
 
     def log(self):
         seconds = (datetime.now() - self.start_time).total_seconds()
@@ -35,3 +41,10 @@ class Ticker:
             self.logger.info("[{}]: {} ticks are finished ({} per second, one in {} seconds)"
                              .format(self.name, self.current_ticks,
                                      1. * self.current_ticks / seconds, 1. * seconds / self.current_ticks))
+
+
+def IterableTicker(logger, iterable, step=10000):
+    ticker = Ticker(logger, 0, type(iterable).__name__, step)
+    for object in iterable:
+        yield object
+        ticker()
