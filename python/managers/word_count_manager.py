@@ -18,7 +18,7 @@ class WordCountManager:
     @staticmethod
     def calculate_word_count():
         count = defaultdict(int)
-        tokens = open(config["parameters"]["raw_model"]["path"]).read().split()
+        tokens = open(config["parameters"]["raw_model"]["path"]).read().decode("utf-8").split()
         ticker = Ticker(logger, len(tokens), "calculate_word_count")
         for token in tokens:
             count[token] += 1
