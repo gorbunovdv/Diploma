@@ -9,5 +9,5 @@ class RoyalManager:
 
     def run(self):
         # NearestNeighboursManager.calculate_nearest_neighbours(self.word2vec)
-        MorphologicalTransformationManager.calculate_morphological_transformations(self.word2vec)
+        # MorphologicalTransformationManager.calculate_morphological_transformations(self.word2vec)
         AcyclicGraphManager.calculate_acyclic_graph(self.word2vec)
