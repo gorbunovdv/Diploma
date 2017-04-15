@@ -16,8 +16,8 @@ class MorphologicalTransformationManager:
     def calculate_morphological_transformations(cls, word2vec):
         fout = open(config["parameters"]["morphological_transformations_build"]["path"] + "/result.txt", "w")
         reader = TransformationsReader(config["parameters"]["transformations_filter"]["filtered_path"])
-        classTicker = Ticker(logger, 0, "classTicker")
-        classTicker2 = Ticker(logger, 0, "splitClassTicker")
+        classTicker = Ticker(logger, 0, "classTicker", 100)
+        classTicker2 = Ticker(logger, 0, "splitClassTicker", 100)
         syn0norm = numpy.array(word2vec.syn0, copy=True)
         syn0norm /= numpy.linalg.norm(syn0norm, axis=1)[:, numpy.newaxis]
         min_cos = float(config["parameters"]["morphological_transformations_build"]["min_cos"])
