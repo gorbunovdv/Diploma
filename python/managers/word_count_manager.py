@@ -26,7 +26,7 @@ class WordCountManager:
             ticker()
         fout = open(config["parameters"]["word_count"]["path"] + "/result.txt", "w")
         for word, cnt in count.iteritems():
-            fout.write(word)
+            fout.write(word.encode('utf-8'))
             fout.write(' ')
             fout.write(str(cnt))
             fout.write("\n")
