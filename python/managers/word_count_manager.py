@@ -21,7 +21,7 @@ class WordCountManager:
         for token in tokens:
             count[token] += 1
             ticker()
-        fout = open(config["parameters"]["word_count"]["path"] + "/result.txt")
+        fout = open(config["parameters"]["word_count"]["path"] + "/result.txt", "w")
         for entity in count.iteritems():
             fout.write("%s %d\n" % entity)
         fout.close()
