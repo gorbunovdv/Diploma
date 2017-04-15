@@ -13,18 +13,18 @@ class WordCountManager:
         if not os.path.exists(config["parameters"]["word_count"]["path"] + "/result.txt"):
             self.calculate_word_count()
         self.count = {}
-        for line in filter(lambda line: len(line) > 0, map(lambda line: line.split(), codecs.open(config["parameters"]["word_count"]["path"] + "/result.txt", 'r', 'utf-8').read().split("\n"))):
+        for line in filter(lambda line: len(line) > 0, map(lambda line: line.split(), open(config["parameters"]["word_count"]["path"] + "/result.txt", 'r').read().split("\n"))):
             self.count[line[0]] = int(line[1])
 
     @staticmethod
     def calculate_word_count():
         count = defaultdict(int)
-        tokens = codecs.open(config["parameters"]["raw_model"]["path"], 'r', 'utf-8').read().split()
+        tokens = open(config["parameters"]["raw_model"]["path"], 'r').read().split()
         ticker = Ticker(logger, len(tokens), "calculate_word_count")
         for token in tokens:
             count[token] += 1
             ticker()
-        fout = codecs.open(config["parameters"]["word_count"]["path"] + "/result.txt", "w", 'utf-8')
+        fout = open(config["parameters"]["word_count"]["path"] + "/result.txt", "w")
         for word, cnt in count.iteritems():
             print type(word)
             fout.write(word)
