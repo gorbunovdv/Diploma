@@ -1,7 +1,7 @@
 {
   "word2vec" : {
-    "model" : "all.norm-sz100-w10-cb0-it1-min100.w2v",
-    "path" : "/mnt/mount/Diploma/all.norm-sz100-w10-cb0-it1-min100.w2v",
+    "model" : "vectors10",
+    "path" : "./vectors10.bin",
     "valid_letters": "йцукенгшщзфывапролдячсмитьёЁЙЦУКЕНГШЩЗФЫВАПРОЛДЯЧСМИТЬ-"
   },
   "transformations_iterator" : {
@@ -12,20 +12,20 @@
       "remove_add_symbols_count" : 3,
       "total_changes_count" : 6,
       "use_shortest_transformations" : true,
-      "result_path": "/mnt/mount/Diploma/results/transformations_build"
+      "result_path": "./results/transformations_build"
     },
     "transformations_filter": {
-      "sorted_each_path": "/mnt/mount/Diploma/results/sorted_each",
-      "sorted_path": "/mnt/mount/Diploma/results/sorted",
-      "filtered_path": "/mnt/mount/Diploma/results/filtered",
+      "sorted_each_path": "./results/sorted_each",
+      "sorted_path": "./results/sorted",
+      "filtered_path": "./results/filtered",
       "min_transformations_in_class": 100
     },
     "nearest_neighbours": {
       "topk": 50,
-      "path": "/mnt/mount/Diploma/results/nearest_neighbours/result.txt"
+      "path": "./results/nearest_neighbours/result.txt"
     },
     "morphological_transformations_build": {
-      "path": "/mnt/mount/Diploma/results/morphological_transformations",
+      "path": "./results/morphological_transformations",
       "min_cos": 0.5,
       "max_rank": 30
     }
