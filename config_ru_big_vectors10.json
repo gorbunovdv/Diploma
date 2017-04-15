@@ -1,0 +1,39 @@
+{
+  "word2vec" : {
+    "model" : "vectors10.bin",
+    "path" : "/home/dgorbunov/Downloads/vectors10.bin",
+    "valid_letters": "йцукенгшщзфывапролдячсмитьёЁЙЦУКЕНГШЩЗФЫВАПРОЛДЯЧСМИТЬ-"
+  },
+  "transformations_iterator" : {
+    "max_transformations_count_in_file" : 20000000
+  },
+  "parameters" : {
+    "transformations_build" : {
+      "remove_add_symbols_count" : 4,
+      "total_changes_count" : 8,
+      "use_shortest_transformations" : true,
+      "result_path": "/home/dgorbunov/Documents/Diploma/results_config_ru_big_vectors10/transformations_build"
+    },
+    "transformations_filter": {
+      "sorted_each_path": "/home/dgorbunov/Documents/Diploma/results_config_ru_big_vectors10/sorted_each",
+      "sorted_path": "/home/dgorbunov/Documents/Diploma/results_config_ru_big_vectors10/sorted",
+      "filtered_path": "/home/dgorbunov/Documents/Diploma/results_config_ru_big_vectors10/filtered",
+      "min_transformations_in_class": 10
+    },
+    "nearest_neighbours": {
+      "topk": 50,
+      "path": "/home/dgorbunov/Documents/Diploma/results_config_ru_big_vectors10/nearest_neighbours/result.txt"
+    },
+    "morphological_transformations_build": {
+      "path": "/home/dgorbunov/Documents/Diploma/results_config_ru_big_vectors10/morphological_transformations",
+      "min_cos": 0.5,
+      "max_rank": 30
+    },
+    "word_count": {
+      "path": "/home/dgorbunov/Documents/Diploma/results_config_ru_big_vectors10/word_count"
+    },
+    "raw_model": {
+      "path": "/home/dgorbunov/Downloads/wiki_raw.norm"
+    }
+  }
+}
