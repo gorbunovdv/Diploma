@@ -31,6 +31,12 @@
     },
     "acyclic_graph": {
       "path": "/home/dgorbunov/Documents/Diploma/results_ru_small/acyclic_graph"
+    },
+    "word_count": {
+      "path": "/home/dgorbunov/Documents/Diploma/results_ru_small/word_count"
+    },
+    "raw_model": {
+      "path": "/home/dgorbunov/Downloads/word2vec/trunk/text8"
     }
   }
 }

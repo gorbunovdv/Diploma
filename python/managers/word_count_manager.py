@@ -11,7 +11,9 @@ class WordCountManager:
     def __init__(self):
         if not os.path.exists(config["parameters"]["word_count"]["path"] + "/result.txt"):
             self.calculate_word_count()
-        self.count = {line[0]: int(line[1]) for line in map(lambda line: line.split(), open(config["parameters"]["word_count"]["path"] + "/result.txt").read().split("\n"))}
+        self.count = {}
+        for line in filter(lambda line: len(line) > 0, map(lambda line: line.split(), open(config["parameters"]["word_count"]["path"] + "/result.txt").read().split("\n"))):
+            self.count[line[0]] = int(line[1])
 
     @staticmethod
     def calculate_word_count():
