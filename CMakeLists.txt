@@ -7,4 +7,4 @@ set(SOURCE_FILES main.cpp managers/filter_transformation_manager.h data_structur
 
 add_executable(Diploma ${SOURCE_FILES})
 
-target_link_libraries(Diploma jsoncpp jemalloc armadillo)
+target_link_libraries(Diploma jsoncpp jemalloc)
