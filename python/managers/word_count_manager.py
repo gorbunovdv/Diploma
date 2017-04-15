@@ -29,6 +29,7 @@ class WordCountManager:
             fout.write(word)
             fout.write(' ')
             fout.write(str(cnt))
+            fout.write("\n")
         fout.close()
 
     def check_word_counts(self, word2vec, word1, word2):
