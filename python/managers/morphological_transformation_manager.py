@@ -28,11 +28,12 @@ class MorphologicalTransformationManager:
         word_count_manager = WordCountManager()
         PIECE = 5000
         for clazz in reader.foreachClass(word2vec):
+            clazz = filter(lambda transformation: word_count_manager.check_word_counts(word2vec, transformation.from_word, transformation.to_word), clazz)
             shuffle(clazz)
             split_count = (len(clazz) + PIECE - 1) / PIECE
             for i in range(split_count):
                 l, r = max(0, min(i * PIECE, len(clazz) - PIECE)), min(len(clazz), (i + 1) * PIECE)
-                cls.process_class(clazz[l:r], word2vec, syn0norm, fout, nearest_neighbours, word_count_manager)
+                cls.process_class(clazz[l:r], word2vec, syn0norm, fout, nearest_neighbours)
                 classTicker2()
             if split_count > 1:
                 logger.info("Split class with size {} into {} pieces".format(len(clazz), split_count))
@@ -40,7 +41,7 @@ class MorphologicalTransformationManager:
         fout.close()
 
     @classmethod
-    def process_class(cls, clazz, word2vec, syn0norm, fout, nearest_neighbours, word_count_manager):
+    def process_class(cls, clazz, word2vec, syn0norm, fout, nearest_neighbours):
         PA, B = syn0norm[[transformation.from_word for transformation in clazz]], syn0norm[[transformation.to_word for transformation in clazz]]
         threshold = nearest_neighbours[[transformation.to_word for transformation in clazz]]
         for i in range(len(clazz)):
@@ -51,5 +52,5 @@ class MorphologicalTransformationManager:
             C = (A * B).sum(1)
             indices, = numpy.where(C >= threshold)
             for index in indices:
-                if index != i and word_count_manager.check_word_counts(word2vec, clazz[index].from_word, clazz[index].to_word):
+                if index != i:
                     fout.write("%d %d %d %d\n" % (clazz[index].from_word, clazz[index].to_word, clazz[i].from_word, clazz[i].to_word))
