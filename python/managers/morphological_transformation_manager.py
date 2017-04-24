@@ -5,7 +5,6 @@ import numpy
 from python.config.config import config
 from python.logger.logger import Ticker, Logger
 from python.managers.nearest_neighbours_manager import NearestNeighboursManager
-from python.managers.word_count_manager import WordCountManager
 from python.transformations_iterator.transformations_iterator import TransformationsReader
 
 logger = Logger("MorphologicalTransformationManager")
@@ -13,7 +12,7 @@ logger = Logger("MorphologicalTransformationManager")
 
 class MorphologicalTransformationManager:
     @classmethod
-    def calculate_morphological_transformations(cls, word2vec):
+    def calculate_morphological_transformations(cls, word2vec, word_count_manager):
         fout = open(config["parameters"]["morphological_transformations_build"]["path"] + "/result.txt", "w")
         reader = TransformationsReader(config["parameters"]["transformations_filter"]["filtered_path"])
         classTicker = Ticker(logger, 0, "classTicker", 100)
@@ -25,7 +24,6 @@ class MorphologicalTransformationManager:
         nearest_neighbours = NearestNeighboursManager.load_nearest_neighbours(word2vec)[:, max_rank]
         for i in range(len(nearest_neighbours)):
             nearest_neighbours[i] = max(nearest_neighbours[i], min_cos)
-        word_count_manager = WordCountManager()
         PIECE = 5000
         for clazz in reader.foreachClass(word2vec):
             clazz = filter(lambda transformation: word_count_manager.check_word_counts(word2vec, transformation.from_word, transformation.to_word), clazz)

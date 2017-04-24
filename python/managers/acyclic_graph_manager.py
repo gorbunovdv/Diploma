@@ -1,35 +1,31 @@
-import multiprocessing
 from collections import defaultdict
 
 import numpy
-import pathos.multiprocessing
 
 from python.config.config import config
 from python.logger.logger import Logger, IterableTicker, Ticker
 from python.managers.nearest_neighbours_manager import NearestNeighboursManager
 from python.managers.rank_manager import RankManager
-from python.managers.word_count_manager import WordCountManager
 
 logger = Logger("AcyclicGraphManager")
 
 
 class AcyclicGraphManager:
     @classmethod
-    def calculate_acyclic_graph(cls, word2vec):
+    def calculate_acyclic_graph(cls, word2vec, word_count_manager):
         morphological_transformations = [map(int, line.split()) for line in IterableTicker(logger, open(config["parameters"]["morphological_transformations_build"]["path"] + "/result.txt"), 10 ** 6)]
         logger.info("Read all morphological transformations")
         fout = open(config["parameters"]["acyclic_graph"]["path"] + "/result.txt", "w")
-        for edge in cls.calc_acyclic_graph(word2vec, morphological_transformations):
+        for edge in cls.calc_acyclic_graph(word2vec, morphological_transformations, word_count_manager):
             if edge is not None:
-                word1, word2, word3, word4 = edge
-                # fout.write("%d %d %d %d\n" % edge)
-                fout.write("{} {} {} {}\n".format(word2vec.index2word[word1].word, word2vec.index2word[word2].word, word2vec.index2word[word3].word, word2vec.index2word[word4].word))
+                # word1, word2, word3, word4 = edge
+                fout.write("%d %d %d %d\n" % edge)
+                # fout.write("{} {} {} {}\n".format(word2vec.index2word[word1].word, word2vec.index2word[word2].word, word2vec.index2word[word3].word, word2vec.index2word[word4].word))
         fout.close()
 
     @classmethod
-    def calc_acyclic_graph(cls, word2vec, morphological_transformations):
+    def calc_acyclic_graph(cls, word2vec, morphological_transformations, word_count_manager):
         ticker = Ticker(logger, 0, "AcyclicGraphManager")
-        word_count_manager = WordCountManager()
         edge_by_word = defaultdict(list)
         nearest_neighbours = NearestNeighboursManager.load_nearest_neighbours(word2vec)
         for word1, word2, word3, word4 in morphological_transformations:
@@ -52,6 +48,3 @@ class AcyclicGraphManager:
         vc2 /= numpy.linalg.norm(vc2)
         cos = numpy.dot(word2vec.syn0[word2] / numpy.linalg.norm(word2vec.syn0[word2]), vc2)
         return RankManager.get_rank(nearest_neighbours[word2], cos), -cos
-
-
-pool = pathos.multiprocessing.Pool(processes=multiprocessing.cpu_count())

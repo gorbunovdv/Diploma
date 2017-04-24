@@ -1,10 +1,26 @@
-import multiprocessing
 import numpy
 
 from python.config.config import config
 from python.logger.logger import Ticker, Logger
 
+from python.pool.pool import pool
+
 logger = Logger("NearestNeighboursManager")
+
+class func:
+    def __init__(self, vectors, vectors_t, topk, tick):
+        self.vectors = vectors
+        self.vectors_t = vectors_t
+        self.topk = topk
+        self.tick = tick
+
+    def __call__(self, i):
+        current = numpy.dot(self.vectors[i][numpy.newaxis, :], self.vectors_t)[0]
+        current = current[numpy.argpartition(current, len(current) - self.topk)]
+        current = current[len(current) - self.topk:]
+        current = current[numpy.argsort(current)][::-1]
+        self.tick()
+        return current
 
 class NearestNeighboursManager:
     @classmethod
@@ -31,13 +47,8 @@ class NearestNeighboursManager:
         vectors /= numpy.linalg.norm(vectors, axis=1)[:, numpy.newaxis]
         vectors_t = vectors.transpose()
         tick = Ticker(logger, len(vectors), "get_nearest_neighbours")
-        for i in range(len(vectors)):
-            current = numpy.dot(vectors[i][numpy.newaxis, :], vectors_t)[0]
-            current = current[numpy.argpartition(current, len(current) - topk)]
-            current = current[len(current) - topk:]
-            current = current[numpy.argsort(current)][::-1]
+        for current in pool.imap(func(vectors, vectors_t, topk, tick), range(len(vectors))):
             operator(current)
-            tick()
 
     @classmethod
     def load_nearest_neighbours(cls, word2vec):
