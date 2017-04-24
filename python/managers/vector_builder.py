@@ -9,7 +9,7 @@ class VectorBuilder:
     def __init__(self, word2vec, word_count):
         assert isinstance(word2vec, Word2Vec)
         self.word2vec = word2vec
-        graph_filename = config["parameters"]["acyclic_graph"]["path"]
+        graph_filename = config["parameters"]["acyclic_graph"]["path"] + "/result.txt"
         self.mapping = defaultdict(lambda: -1)
         for word1, word2, word3, word4 in imap(lambda line: map(int, line.split()), open(graph_filename)):
             self.mapping[word1] = word2
@@ -67,6 +67,7 @@ class VectorBuilder:
         else:
             c1, c2 = word1[:-lca2], word2[:-lca2]
             p_delete, p_add = cls.update_prefix(c1, c2, p_delete, p_add)
+        return p_delete, p_add, s_delete, s_add
 
     @classmethod
     def update_prefix(cls, w1, w2, w3, w4):

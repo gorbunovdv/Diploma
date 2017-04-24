@@ -35,4 +35,4 @@ class WordCountManager:
             ticker()
 
     def check_word_counts(self, word2vec, word1, word2):
-        return self.count[word2vec.index2word[word1].word] >= self.count[word2vec.index2word[word2].word]
+        return self.count[word2vec.index2word[word1].word] < self.count[word2vec.index2word[word2].word]
