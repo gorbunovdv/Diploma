@@ -25,7 +25,7 @@ class VectorBuilder:
             if used[word_index]:
                 return
             used[word_index] = True
-            if mapping[word_index] != -1:
+            if word_index in mapping and mapping[word_index] != -1:
                 dfs(mapping[word_index], mapping, topological_sorting, used)
             topological_sorting.append(word_index)
 
@@ -50,15 +50,15 @@ class VectorBuilder:
             p_delete, p_add, s_delete, s_add = transformation[i]
             transformations[p_delete][s_delete] = (p_add, s_add, length[i])
 
-        return transformation, length
+        return transformations, length
 
     @classmethod
     def composite(cls, word1, word2, transformation):
         p_delete, p_add, s_delete, s_add = transformation
         lca1, lca2 = 0, 1
-        while lca1 < len(word1) and lca1 < len(word2) and word1[lca1] == word2[lca2]:
+        while lca1 < len(word1) and lca1 < len(word2) and word1[lca1] == word2[lca1]:
             lca1 += 1
-        while lca2 < len(word1) and lca2 < len(word2) and word1[-lca1] == word2[-lca2]:
+        while lca2 < len(word1) and lca2 < len(word2) and word1[-lca2] == word2[-lca2]:
             lca2 += 1
         lca2 -= 1
         if lca1 > lca2:
@@ -79,16 +79,18 @@ class VectorBuilder:
 
     @classmethod
     def update_suffix(cls, w1, w2, w3, w4):
-        w1, w4 = cls.update_prefix(reversed(w1), reversed(w2), reversed(w3), reversed(w4))
+        w1, w2, w3, w4 = ("".join(reversed(w)) for w in (w1, w2, w3, w4))
+        w1, w4 = cls.update_prefix(w1, w2, w3, w4)
+        w1, w4 = ("".join(reversed(w)) for w in (w1, w4))
         return "".join(reversed(w1)), "".join(reversed(w4))
 
     def predict_vector(self, word):
-        if word in self.word_count.count and self.word_count.count[word] >= 100:
+        if word in self.word_count and self.word_count[word] >= 100:
             return self.word2vec.syn0[self.word2vec.vocab[word].index]
         for prefix in range(len(word)):
             for suffix in range(prefix + 1, len(word)):
                 s1, s2 = word[:prefix + 1], word[suffix:]
-                for add_left, add_right, length in self.transformation[s1][s2]:
+                for (add_left, add_right, length) in self.transformation[s1][s2]:
                     result = add_left + word[prefix + 1:suffix] + add_right
                     if result in self.word2vec.vocab and self.word_count.count[result] >= 100:
                         return self.word2vec.syn0[self.word2vec.vocab[result].index]

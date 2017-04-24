@@ -34,11 +34,11 @@ class AcyclicGraphManager:
 
     @classmethod
     def get_next_edge(cls, word2vec, word_count_manager, nearest_neighbours, edges_list, ticker):
+        ticker()
         edge_list = filter(lambda edge: word_count_manager.check_word_counts(word2vec, edge[0], edge[1]), edges_list)
         if len(edge_list) == 0:
             return None
         result = min(edge_list, key=lambda edge: cls.get_key(word2vec, nearest_neighbours, edge))
-        ticker()
         return result
 
     @staticmethod

@@ -11,6 +11,6 @@ class RoyalManager:
     def run(self):
 #        NearestNeighboursManager.calculate_nearest_neighbours(self.word2vec)
         word_count_manager = WordCountManager()
-        MorphologicalTransformationManager.calculate_morphological_transformations(self.word2vec, word_count_manager)
-        AcyclicGraphManager.calculate_acyclic_graph(self.word2vec, word_count_manager)
-        # vocab = Word2VecConstructor.construct(self.word2vec, word_count_manager)
+        #MorphologicalTransformationManager.calculate_morphological_transformations(self.word2vec, word_count_manager)
+        #AcyclicGraphManager.calculate_acyclic_graph(self.word2vec, word_count_manager)
+        vocab = Word2VecConstructor.construct(self.word2vec, word_count_manager.count)

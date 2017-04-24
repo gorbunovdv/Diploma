@@ -27,10 +27,12 @@ class WordCountManager:
         self.calculate_word_count()
 
     def calculate_word_count(self):
-        self.count = defaultdict(int)
+        self.count = {}
         tokens = tokenizer(open(config["parameters"]["raw_model"]["path"], 'r'))
         ticker = Ticker(logger, 0, "calculate_word_count")
         for token in tokens:
+            if not token in self.count:
+                self.count[token] = 0
             self.count[token] += 1
             ticker()
 
