@@ -6,16 +6,6 @@ from python.logger.logger import Ticker, Logger
 logger = Logger("NearestNeighboursManager")
 
 
-def func(tup):
-    vectors, vectors_t, topk, tick, i = tup
-    current = numpy.dot(vectors[i][numpy.newaxis, :], vectors_t)[0]
-    current = current[numpy.argpartition(current, len(current) - topk)]
-    current = current[len(current) - topk:]
-    current = current[numpy.argsort(current)][::-1]
-    tick()
-    return current
-
-
 class NearestNeighboursManager:
     @classmethod
     def calculate_nearest_neighbours(cls, word2vec):
@@ -41,8 +31,13 @@ class NearestNeighboursManager:
         vectors /= numpy.linalg.norm(vectors, axis=1)[:, numpy.newaxis]
         vectors_t = vectors.transpose()
         tick = Ticker(logger, len(vectors), "get_nearest_neighbours")
-        for current in pool.imap(func, [(vectors, vectors_t, topk, tick, i) for i in range(len(vectors))]):
+        for i in range(len(vectors)):
+            current = numpy.dot(vectors[i][numpy.newaxis, :], vectors_t)[0]
+            current = current[numpy.argpartition(current, len(current) - topk)]
+            current = current[len(current) - topk:]
+            current = current[numpy.argsort(current)][::-1]
             operator(current)
+            tick()
 
     @classmethod
     def load_nearest_neighbours(cls, word2vec):
@@ -51,6 +46,3 @@ class NearestNeighboursManager:
                                cls.read_floats_from_file(fin)
                                for _ in range(word2vec.words_count)
                                ])
-
-
-from python.pool.pool import pool
