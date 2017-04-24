@@ -5,20 +5,16 @@ from python.logger.logger import Ticker, Logger
 
 logger = Logger("NearestNeighboursManager")
 
-class func:
-    def __init__(self, vectors, vectors_t, topk, tick):
-        self.vectors = vectors
-        self.vectors_t = vectors_t
-        self.topk = topk
-        self.tick = tick
 
-    def __call__(self, i):
-        current = numpy.dot(self.vectors[i][numpy.newaxis, :], self.vectors_t)[0]
-        current = current[numpy.argpartition(current, len(current) - self.topk)]
-        current = current[len(current) - self.topk:]
-        current = current[numpy.argsort(current)][::-1]
-        self.tick()
-        return current
+def func(tup):
+    vectors, vectors_t, topk, tick, i = tup
+    current = numpy.dot(vectors[i][numpy.newaxis, :], vectors_t)[0]
+    current = current[numpy.argpartition(current, len(current) - topk)]
+    current = current[len(current) - topk:]
+    current = current[numpy.argsort(current)][::-1]
+    tick()
+    return current
+
 
 class NearestNeighboursManager:
     @classmethod
@@ -45,15 +41,16 @@ class NearestNeighboursManager:
         vectors /= numpy.linalg.norm(vectors, axis=1)[:, numpy.newaxis]
         vectors_t = vectors.transpose()
         tick = Ticker(logger, len(vectors), "get_nearest_neighbours")
-        for current in pool.imap(func(vectors, vectors_t, topk, tick), range(len(vectors))):
+        for current in pool.imap(func, [(vectors, vectors_t, topk, tick, i) for i in range(len(vectors))]):
             operator(current)
 
     @classmethod
     def load_nearest_neighbours(cls, word2vec):
         fin = open(config["parameters"]["nearest_neighbours"]["path"], "r")
         return numpy.array([
-            cls.read_floats_from_file(fin)
-            for _ in range(word2vec.words_count)
-        ])
+                               cls.read_floats_from_file(fin)
+                               for _ in range(word2vec.words_count)
+                               ])
+
 
 from python.pool.pool import pool
