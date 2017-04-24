@@ -3,8 +3,6 @@ import numpy
 from python.config.config import config
 from python.logger.logger import Ticker, Logger
 
-from python.pool.pool import pool
-
 logger = Logger("NearestNeighboursManager")
 
 class func:
@@ -57,3 +55,5 @@ class NearestNeighboursManager:
             cls.read_floats_from_file(fin)
             for _ in range(word2vec.words_count)
         ])
+
+from python.pool.pool import pool
