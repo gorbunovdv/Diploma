@@ -22,6 +22,7 @@ class Word2Vec:
         self.words_count, self.dimensions_count = map(int, header.split())
         letters_set = set(unicode(config["word2vec"]["valid_letters"]))
         self.index2word = []
+        self.vocab = {}
         i = 0
         binary_length = numpy.dtype(REAL).itemsize * self.dimensions_count
         deleted_words = 0
@@ -41,6 +42,7 @@ class Word2Vec:
             if add_word:
                 self.index2word.append(cur)
                 self.syn0.append(numpy.array(cur.syn0, copy=True))
+                self.vocab[cur.word] = cur
             else:
                 i -= 1
                 self.words_count -= 1

@@ -25,7 +25,7 @@ class AcyclicGraphManager:
 
     @classmethod
     def calc_acyclic_graph(cls, word2vec, morphological_transformations, word_count_manager):
-        ticker = Ticker(logger, 0, "AcyclicGraphManager")
+        ticker = Ticker(logger, len(word2vec.index2word), "AcyclicGraphManager")
         edge_by_word = defaultdict(list)
         nearest_neighbours = NearestNeighboursManager.load_nearest_neighbours(word2vec)
         for word1, word2, word3, word4 in morphological_transformations:

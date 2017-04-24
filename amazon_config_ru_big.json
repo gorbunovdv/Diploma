@@ -1,7 +1,7 @@
 {
   "word2vec" : {
     "model" : "vectors10",
-    "path" : "../vectors.bin",
+    "path" : "./vectors.bin",
     "valid_letters": "йцукенгшщзфывапролдячсмитьёЁЙЦУКЕНГШЩЗФЫВАПРОЛДЯЧСМИТЬ-"
   },
   "transformations_iterator" : {
@@ -28,6 +28,12 @@
       "path": "./results/morphological_transformations",
       "min_cos": 0.5,
       "max_rank": 30
+    },
+    "raw_model" : {
+      "path": "../wiki_raw.norm"
+    },
+    "acyclic_graph": {
+      "path": "./results/acyclic_graph/result.txt"
     }
   }
 }
