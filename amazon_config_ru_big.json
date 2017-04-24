@@ -1,7 +1,7 @@
 {
   "word2vec" : {
     "model" : "vectors10",
-    "path" : "./vectors10.bin",
+    "path" : "../vectors.bin",
     "valid_letters": "йцукенгшщзфывапролдячсмитьёЁЙЦУКЕНГШЩЗФЫВАПРОЛДЯЧСМИТЬ-"
   },
   "transformations_iterator" : {
