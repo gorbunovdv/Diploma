@@ -13,7 +13,7 @@ def tokenizer(file):
         symbol = file.read(1)
         if symbol == b'':
             break
-        if symbol == b' ' or symbol == b'\n':
+        if symbol == b' ' or symbol == b'\n' or symbol == b'\t':
             if current_token != b"":
                 yield utils.to_unicode(b''.join(current_token))
             current_token = []

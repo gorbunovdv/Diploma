@@ -1,39 +1,39 @@
 {
   "word2vec" : {
-    "model" : "vectors_small.bin",
-    "path" : "/home/dgorbunov/Mega/word2vec/trunk/vectors_small.bin",
+    "model" : "vectors10",
+    "path" : "./vectors.bin",
     "valid_letters": "йцукенгшщзфывапролдячсмитьёЁЙЦУКЕНГШЩЗФЫВАПРОЛДЯЧСМИТЬ-"
   },
   "transformations_iterator" : {
-    "max_transformations_count_in_file" : 20000000
+    "max_transformations_count_in_file" : 150000000
   },
   "parameters" : {
     "transformations_build" : {
-      "remove_add_symbols_count" : 4,
-      "total_changes_count" : 8,
+      "remove_add_symbols_count" : 3,
+      "total_changes_count" : 6,
       "use_shortest_transformations" : true,
-      "result_path": "/home/dgorbunov/Documents/Diploma/results_config_ru_small/transformations_build"
+      "result_path": "./results/transformations_build"
     },
     "transformations_filter": {
-      "sorted_each_path": "/home/dgorbunov/Documents/Diploma/results_config_ru_small/sorted_each",
-      "sorted_path": "/home/dgorbunov/Documents/Diploma/results_config_ru_small/sorted",
-      "filtered_path": "/home/dgorbunov/Documents/Diploma/results_config_ru_small/filtered",
-      "min_transformations_in_class": 10
+      "sorted_each_path": "./results/sorted_each",
+      "sorted_path": "./results/sorted",
+      "filtered_path": "./results/filtered",
+      "min_transformations_in_class": 100
     },
     "nearest_neighbours": {
       "topk": 50,
-      "path": "/home/dgorbunov/Documents/Diploma/results_config_ru_small/nearest_neighbours/result.txt"
+      "path": "./results/nearest_neighbours/result.txt"
     },
     "morphological_transformations_build": {
-      "path": "/home/dgorbunov/Documents/Diploma/results_config_ru_small/morphological_transformations",
+      "path": "./results/morphological_transformations",
       "min_cos": 0.5,
       "max_rank": 30
     },
-    "word_count": {
-      "path": "/home/dgorbunov/Documents/Diploma/results_config_ru_small/word_count"
-    },
     "raw_model": {
       "path": "/home/dgorbunov/Downloads/wiki_raw.norm.small"
+    },
+    "acyclic_graph": {
+      "path": "./results/acyclic_graph/"
     }
   }
 }

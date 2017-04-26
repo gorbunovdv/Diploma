@@ -31,3 +31,11 @@
 
 .idea
 cmake-build*
+build/
+result.txt
+result2.txt
+results_config_en_big/
+results_config_ru_big_3/
+results_config_ru_big_4/
+results_config_ru_big_vectors10/
+results_ru_small/
