@@ -2,24 +2,25 @@ from collections import defaultdict
 
 from python.config.config import config
 from python.logger.logger import Ticker, Logger
+from gensim import utils
 
 logger = Logger("WordCountManager")
 
 
 def tokenizer(file):
-    current_token = ""
+    current_token = []
     while True:
         symbol = file.read(1)
-        if symbol == "":
+        if symbol == b'':
             break
-        if symbol == ' ' or symbol == '\n':
-            if current_token != "":
-                yield current_token
-            current_token = ""
+        if symbol == b' ' or symbol == b'\n':
+            if current_token != b"":
+                yield utils.to_unicode(b''.join(current_token))
+            current_token = []
         else:
-            current_token += symbol
-    if current_token != "":
-        yield current_token
+            current_token.append(symbol)
+    if current_token != []:
+        yield utils.to_unicode(b''.join(current_token))
 
 
 class WordCountManager:

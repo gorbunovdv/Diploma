@@ -46,9 +46,13 @@ class VectorBuilder:
 
         transformations = defaultdict(lambda: defaultdict(list))
 
+        print "Max length: ", max(length)
+
         for i in range(len(transformation)):
+            if length[i] <= 3:
+                continue
             p_delete, p_add, s_delete, s_add = transformation[i]
-            transformations[p_delete][s_delete] = (p_add, s_add, length[i])
+            transformations[p_delete][s_delete].append((p_add, s_add, length[i]))
 
         return transformations, length
 
@@ -92,6 +96,6 @@ class VectorBuilder:
                 s1, s2 = word[:prefix + 1], word[suffix:]
                 for (add_left, add_right, length) in self.transformation[s1][s2]:
                     result = add_left + word[prefix + 1:suffix] + add_right
-                    if result in self.word2vec.vocab and self.word_count.count[result] >= 100:
+                    if result in self.word2vec.vocab and self.word_count[result] >= 100:
                         return self.word2vec.syn0[self.word2vec.vocab[result].index]
         return None
