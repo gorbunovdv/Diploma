@@ -2,7 +2,7 @@ from collections import defaultdict
 
 from python.config.config import config
 from python.logger.logger import Ticker, Logger
-from gensim import utils
+from python.utils import utils
 
 logger = Logger("WordCountManager")
 

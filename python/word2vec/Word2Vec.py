@@ -1,9 +1,5 @@
-import traceback
-
 import numpy
-import sys
-from gensim.models.word2vec_inner import REAL
-from gensim import utils
+from python.utils import utils
 
 from python.config.config import config
 from python.logger.logger import Logger
@@ -24,7 +20,7 @@ class Word2Vec:
         self.index2word = []
         self.vocab = {}
         i = 0
-        binary_length = numpy.dtype(REAL).itemsize * self.dimensions_count
+        binary_length = numpy.dtype(numpy.float32).itemsize * self.dimensions_count
         deleted_words = 0
         self.syn0 = []
         while i < self.words_count:
@@ -38,7 +34,7 @@ class Word2Vec:
             except Exception, e:
                 logger.info("UTF encoding failed: skipping word")
                 add_word = False
-            cur.syn0 = numpy.fromstring(fin.read(binary_length), dtype=REAL)
+            cur.syn0 = numpy.fromstring(fin.read(binary_length), dtype=numpy.float32)
             if add_word:
                 self.index2word.append(cur)
                 self.syn0.append(numpy.array(cur.syn0, copy=True))
