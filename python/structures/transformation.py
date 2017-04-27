@@ -1,3 +1,8 @@
+# coding=utf-8
+
+"""
+    Структура для хранения преобразования
+"""
 class Transformation:
     PREFIX = 0
     SUFFIX = 1

@@ -1,8 +1,13 @@
+# coding=utf-8
+
 from python.logger.logger import IterableTicker, Logger
 from python.managers.vector_builder import VectorBuilder
 
 logger = Logger('Word2VecConstructor')
 
+"""
+    Менеджер, осуществляющий построение новой модели Word2Vec с редкими словами
+"""
 class Word2VecConstructor:
     @staticmethod
     def construct(word2vec, word_count):

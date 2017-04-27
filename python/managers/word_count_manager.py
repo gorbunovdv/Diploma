@@ -1,3 +1,4 @@
+# coding=utf-8
 from collections import defaultdict
 
 from python.config.config import config
@@ -22,7 +23,9 @@ def tokenizer(file):
     if current_token != []:
         yield utils.to_unicode(b''.join(current_token))
 
-
+"""
+    Менеджер, осуществующий подсчет частот слов в исходном корпусе текстов
+"""
 class WordCountManager:
     def __init__(self):
         self.calculate_word_count()

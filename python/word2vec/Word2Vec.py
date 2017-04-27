@@ -1,3 +1,5 @@
+# coding=utf-8
+
 import numpy
 from python.utils import utils
 
@@ -10,6 +12,10 @@ logger = Logger("Word2Vec")
 class Vocab:
     pass
 
+"""
+    Класс, реализующий хранение модели Word2Vec. Отсекает слова с символами, не встречающимися в данном языке.
+    Реализация аналогична классу Word2Vec в C++.
+"""
 
 class Word2Vec:
     def __init__(self, fin):
@@ -50,6 +56,9 @@ class Word2Vec:
         logger.info("Deleted {} words".format(deleted_words))
         logger.info("{} words in model".format(self.words_count))
 
+    """
+        Проверить, валидно ли слово, т.е. встречаются ли в нем символы не из алфавита
+    """
     @staticmethod
     def check_if_word_is_valid(word, letters_set):
         for letter in word:

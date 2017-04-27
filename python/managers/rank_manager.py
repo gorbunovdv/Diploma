@@ -1,3 +1,8 @@
+# coding=utf-8
+
+"""
+    Менеджер для быстрого поиска ранга бинарным поиском
+"""
 class RankManager:
     @staticmethod
     def get_rank(cos_list, cos):

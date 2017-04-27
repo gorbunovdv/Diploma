@@ -1,10 +1,13 @@
+# coding=utf-8
 from collections import defaultdict
 from itertools import imap
 
 from python.config.config import config
 from python.word2vec.Word2Vec import Word2Vec
 
-
+"""
+    Менеджер, осуществляющий подсчет векторов для редких слов
+"""
 class VectorBuilder:
     def __init__(self, word2vec, word_count):
         assert isinstance(word2vec, Word2Vec)
@@ -16,6 +19,9 @@ class VectorBuilder:
         self.transformation, self.length = self.calculate_rs(word2vec, self.mapping)
         self.word_count = word_count
 
+    """
+        Насчитать множество RS по ациклическому графу
+    """
     @classmethod
     def calculate_rs(cls, word2vec, mapping):
         used = defaultdict(bool)
@@ -56,6 +62,9 @@ class VectorBuilder:
 
         return transformations, length
 
+    """
+        Применить преобразование, образованное словами word1, word2 к преобразованию transformation
+    """
     @classmethod
     def composite(cls, word1, word2, transformation):
         p_delete, p_add, s_delete, s_add = transformation
@@ -88,6 +97,9 @@ class VectorBuilder:
         w1, w4 = ("".join(reversed(w)) for w in (w1, w4))
         return "".join(reversed(w1)), "".join(reversed(w4))
 
+    """
+        Предсказать вектор для слова word
+    """
     def predict_vector(self, word):
         if word in self.word2vec.word_list and self.word_count[word] >= 100:
             return self.word2vec.syn0[self.word2vec.vocab[word].index]

@@ -1,15 +1,17 @@
+# coding=utf-8
+
 import struct
 from os import listdir
 from os.path import isfile, join
-
-import io
 
 from python.logger.logger import Logger
 from python.structures.transformation import Transformation
 
 logger = Logger("TransformationReader")
 
-
+"""
+    Класс для удобного считывания преобразований из файлов
+"""
 class TransformationsReader:
     def __init__(self, path):
         self.files = sorted([join(path, file) for file in listdir(path) if isfile(join(path, file))])
@@ -33,6 +35,9 @@ class TransformationsReader:
                     except EOFError:
                         break
 
+    """
+        Генератор, выдающий все преобразования, сгруппированные по классу
+    """
     def foreachClass(self, word2vec):
         current_class = []
         current_class_type = u""
