@@ -78,3 +78,6 @@ class Word2Vec:
             if ch != b'\n':  # ignore newlines in front of words (some binary files have)
                 word.append(ch)
         return utils.to_unicode(b''.join(word))
+
+    def generate_vocab(self):
+        return {cur.word: cur.syn0 for cur in self.index2word}

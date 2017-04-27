@@ -34,6 +34,12 @@
     },
     "acyclic_graph": {
       "path": "./results/acyclic_graph/"
+    },
+    "evaluation": {
+      "dataset_paths": [
+        "./russe-evaluation/russe/evaluation/hj.csv"
+      ],
+      "result_folder": "./results/evaluation"
     }
   }
 }
