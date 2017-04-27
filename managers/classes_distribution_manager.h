@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include "../data_structures/transformations_iterator.h"
 
+// Менеджер, отвечающий за подсчет статистики по классам преобразований, в зависимости от размера класса
 class ClassesDistributionManager {
 public:
   ClassesDistributionManager(std::string path, const std::shared_ptr<Word2Vec> &word2vec) {

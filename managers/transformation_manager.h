@@ -17,6 +17,7 @@
 #include "../config/config.h"
 #include "../data_structures/transformations_iterator.h"
 
+// Менеджер, осуществляющий подсчет всех преобразований
 class TransformationManager {
 public:
   static void getAllTransformations(const std::shared_ptr<Word2Vec> &word2vec) {
@@ -27,6 +28,7 @@ public:
     TransformationManager::getAllTransformationsInternal(word2vec, Transformation::PREFIX, writer);
   }
 
+  // Внутренняя функция, осуществляющая подсчет преобразований либо суффиксных, либо префиксных
   static void getAllTransformationsInternal(
     const std::shared_ptr<Word2Vec> &word2vec,
     Transformation::Type type,

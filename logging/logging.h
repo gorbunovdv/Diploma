@@ -13,13 +13,16 @@ std::ofstream ____result2("result2.txt");
 
 auto start = std::chrono::high_resolution_clock::now();
 
+// Макрос для удобного логирования
 #define LOGGER() std::cerr << std::fixed << "[" << \
 std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count() \
  / 1000.0 << "] -> " \
 << "(" << __FUNCTION__ << "): "
+// Макрос для удобного вывода результатов
 #define RESULT() ____result
 #define RESULT2() ____result2
 
+// Класс для удобного вывода текущего прогресса по операциям
 class Ticker {
 public:
   Ticker(std::string ticker, int32_t max_ticks) : ticker(ticker), max_ticks(max_ticks) {}

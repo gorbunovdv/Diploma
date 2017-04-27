@@ -19,10 +19,11 @@ class Word2Vec:
         letters_set = set(unicode(config["word2vec"]["valid_letters"]))
         self.index2word = []
         self.vocab = {}
+        self.word_list = set()
         i = 0
         binary_length = numpy.dtype(numpy.float32).itemsize * self.dimensions_count
         deleted_words = 0
-        self.syn0 = []
+        syn0 = []
         while i < self.words_count:
             add_word = True
             cur = Vocab()
@@ -37,14 +38,15 @@ class Word2Vec:
             cur.syn0 = numpy.fromstring(fin.read(binary_length), dtype=numpy.float32)
             if add_word:
                 self.index2word.append(cur)
-                self.syn0.append(numpy.array(cur.syn0, copy=True))
+                syn0.append(numpy.array(cur.syn0, copy=True))
                 self.vocab[cur.word] = cur
+                self.word_list.add(cur.word)
             else:
                 i -= 1
                 self.words_count -= 1
                 deleted_words += 1
             i += 1
-        self.syn0 = numpy.array(self.syn0)
+        self.syn0 = numpy.array(syn0)
         logger.info("Deleted {} words".format(deleted_words))
         logger.info("{} words in model".format(self.words_count))
 

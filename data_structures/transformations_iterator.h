@@ -14,6 +14,7 @@
 #include "../structures/transformation.h"
 #include "../utils.h"
 
+// Класс для удобного считывания преобразований из файла
 class TransformationsReader {
 public:
   TransformationsReader(std::string path, const std::shared_ptr<Word2Vec> &word2vec) : word2vec(word2vec) {
@@ -21,6 +22,7 @@ public:
     files = std::deque<std::string>(vector.begin(), vector.end());
   }
 
+  // Находит список всех файлов в указанной директории
   static std::vector<std::string> getFiles(std::string path) {
     std::vector<std::string> files;
     DIR *dir;
@@ -40,6 +42,7 @@ public:
     return files;
   }
 
+  // Считывает следующее преобразование в списке
   bool next(Transformation &result) {
     while (!current_file->isDefined() || current_file->eof()) {
       if (current_file->isDefined() && current_file->eof()) {
@@ -61,6 +64,7 @@ public:
     return false;
   }
 
+  // Применяет оператор ко всем преобразованиям в файлах
   template<typename Operator>
   void foreach(Operator anOperator) {
     Transformation currentTransformation;
@@ -69,6 +73,7 @@ public:
     }
   }
 
+  // Применяет оператор ко всем преобразованиям в классе (они должны быть отсортированы)
   template<typename Operator>
   void foreachClass(const std::shared_ptr<Word2Vec> &word2vec, Operator anOperator) {
     std::pair<int64_t, int64_t> currentHash;
@@ -100,6 +105,7 @@ private:
   const std::shared_ptr<Word2Vec> word2vec;
 };
 
+// Класс для удобной записи преобразований в директорию
 class TransformationsWriter {
 public:
   TransformationsWriter(std::string path, const std::shared_ptr<Word2Vec> &word2vec): path(path), word2vec(word2vec) {
@@ -110,6 +116,7 @@ public:
     max_transformations_count_in_file = config["transformations_iterator"]["max_transformations_count_in_file"].asInt();
   }
 
+  // Записать преобразование transformation в файл
   void write(const Transformation &transformation) {
     ++current_transformation_number;
     if (current_file == nullptr || current_transformation_number > max_transformations_count_in_file) {
@@ -118,6 +125,7 @@ public:
     word2vec->write(current_file, transformation);
   }
 
+  // Записать все преобразования в полуинтервале итераторов
   template<typename Iterator>
   void write(Iterator begin, const Iterator &end) {
     while (begin != end) {
@@ -126,6 +134,7 @@ public:
     }
   }
 
+  // Записать все преобразования в контейнере
   template<typename Container>
   void write(const Container &container) {
     for (auto i : container) {

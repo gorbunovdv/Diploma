@@ -8,8 +8,10 @@
 #include <algorithm>
 #include "../Word2Vec/word2vec.h"
 
+// Структура для хранения преобразования
 class Transformation {
 public:
+  // Тип преобразования
   enum Type {
     PREFIX,
     SUFFIX,
@@ -20,6 +22,7 @@ public:
 
   Transformation() = default;
 
+  // Функция для валидации преобразования
   template<typename Word2Vec>
   bool validate(const Word2Vec &word2vec) const {
     if (type != PREFIX && type != SUFFIX) {
@@ -47,6 +50,7 @@ public:
     return len(from_vocab) - lcp <= to_delete && len(to_vocab) - lcp <= to_add;
   }
 
+  // Функция для печати текущего преобразования
   template<typename Word2Vec>
   void print(const std::shared_ptr<Word2Vec> &word2vec) const {
     const auto &from_vocab = word2vec->index2word[from_word]->word;
@@ -60,6 +64,7 @@ public:
     }
   }
 
+  // Функция для взятия класса данного преобразования
   template<typename Word2Vec>
   static utf_string getClass(const std::shared_ptr<Word2Vec>& word2vec,
       int32_t from_word,
@@ -78,11 +83,13 @@ public:
     }
   }
 
+  // Функция для взятия класса от текущего преобразования
   template<typename Word2Vec>
   utf_string getClass(const std::shared_ptr<Word2Vec>& word2vec) const {
     return Transformation::getClass(word2vec, from_word, to_delete, to_word, to_add, type);
   }
 
+  // Функция для взятия хеша от класса текущего преобразования
   template<typename Word2Vec>
   std::pair<int64_t, int64_t> hash(const std::shared_ptr<Word2Vec> &word2vec) const {
     utf_string clazz = getClass(word2vec);

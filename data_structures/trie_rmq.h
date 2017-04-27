@@ -7,6 +7,7 @@
 
 #include "../data_structures/trie.h"
 
+// Класс для хранения двумерного дерева отрезков эйлерова обхода префиксного дерева
 class TrieRMQ {
 public:
   TrieRMQ(std::shared_ptr<Trie> trie) : trie(trie) {
@@ -14,10 +15,12 @@ public:
     make_rmq(1, 0, len(trie->euler) - 1);
   }
 
+  // Возвращает суммарный объем двумерного дерева
   int32_t getTotalVectorsSize() const {
     return totalVectorsSize;
   }
 
+  // Осуществляет запрос к двумерному дерему отрезков: найти все вершины с временем входа на отрезке [l, r], и глубины не более h.
   void request(int32_t l, int32_t r, int h, std::vector<std::tuple<int, int32_t>> &result) {
     auto linf = std::numeric_limits<int32_t>::max();
     auto inf = std::numeric_limits<int32_t>::max();
@@ -27,6 +30,7 @@ public:
   }
 
 private:
+  // Внутренняя рекурсивная функция для осуществления запроса к дереву
   void request(int32_t i, int32_t ll, int32_t rr, int32_t l, int32_t r, int h, std::vector<std::tuple<int, int32_t>> &result) {
     if (ll > r || rr < l) {
       return ;
@@ -41,6 +45,7 @@ private:
     request(i * 2 + 1, (ll + rr) / 2 + 1, rr, l, r, h, result);
   }
 
+  // Рекурсивная функция, осуществляющая построение двумерного дерева отрезков
   void make_rmq(int32_t i, int32_t l, int32_t r) {
     if (l == r) {
       int height;

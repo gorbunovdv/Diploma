@@ -16,6 +16,7 @@
 
 Json::Value config;
 
+// Инициализирует JSON конфиг, считывая его из stream
 void init_config(std::istream &stream) {
   Json::Reader reader;
   if (!reader.parse(stream, config)) {

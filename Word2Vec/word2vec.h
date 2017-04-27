@@ -17,8 +17,9 @@
 #include "../structures/vocab.h"
 #include "../structures/transformation.h"
 #include "../utils.h"
-
+// Реализация хранения модели Word2Vec в C++
 struct Word2Vec {
+  // Загрузка Word2Vec из файла: считывает модель, удаляя слова, в которых встречаются другие символы, кроме как из языка
   Word2Vec(const std::unique_ptr<BufferedReader> &file) {
     LOGGER() << "Loading word2vec model" << std::endl;
     int64_t wordsCount_, dimensionsCount_;
@@ -56,14 +57,17 @@ struct Word2Vec {
     LOGGER() << "Last one is \"" << index2word.back()->word << "\"" << std::endl;
   }
 
+  // Возвращает количество слов в модели Word2Vec
   int32_t getWordsCount() const {
     return wordsCount;
   }
 
+  // Возвращает размерность векторного пространства Word2Vec
   int32_t getDimensionsCount() const {
     return dimensionsCount;
   }
 
+  // Считывает преобразование из файла file в result, а также опционально валидирует преобразование
   bool read(const std::unique_ptr<BufferedReader> &file, Transformation &result) {
     memset(&result, -1, sizeof(Transformation));
     int32_t read = file->read(&result, sizeof(Transformation), 1);
@@ -84,6 +88,7 @@ struct Word2Vec {
     return true;
   }
 
+  // Записывает преобразование transformation в файл file, а также опционально валидирует преобразование
   void write(FilePointer &file, Transformation transformation) {
 #ifdef DEBUG_TRANSFORMATIONS
     if (!transformation.validate(this)) {
@@ -104,6 +109,7 @@ struct Word2Vec {
   std::map<utf_string, std::shared_ptr<Vocab>> vocab;
 
 private:
+  // Считывает слово из модели Word2Vec
   static utf_string read_word(FilePointer &file) {
     std::string result;
     while (1) {
@@ -118,6 +124,7 @@ private:
     return utf_string(result);
   }
 
+  // Проверяет, что в слове не содержатся символы, которые не встречаются в letters_list
   static bool check_if_word_is_valid(utf_string &word, const std::set<int32_t> &letters_list) {
     for (auto c : word) {
       if (letters_list.count(c) == 0) {

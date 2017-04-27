@@ -12,8 +12,10 @@
 #include "../structures/transformation.h"
 #include "../data_structures/transformations_iterator.h"
 
+// Менеджер для фильтрации преобразований: сначала сортирует преобразования по хешу от класса,
 class FilterTransformationManager {
 public:
+  // Функция, осуществующая всю фильтрацию
   static void filterAllTransformations(const std::shared_ptr<Word2Vec> &word2vec) {
     auto sourcePath = config["parameters"]["transformations_build"]["result_path"].asString();
     auto destPath = config["parameters"]["transformations_filter"]["sorted_each_path"].asString();
@@ -30,6 +32,7 @@ public:
   }
 
 private:
+  // Функция, осуществующая только фильтрацию отсортированных классов
   static void filterTransformations(const std::shared_ptr<Word2Vec> &word2vec, std::string sourcePath, std::string destPath) {
     LOGGER() << "Filtering transformation classes" << std::endl;
     int32_t min_transformations_in_class = config["parameters"]["transformations_filter"]["min_transformations_in_class"].asInt();
@@ -55,6 +58,7 @@ private:
     return len(transformationClass) >= min_transformations_in_class;
   }
 
+  // Функция, осуществляющая вторую часть внешней сортировки: слияние отсортированных преобразований в разных файлах
   static void sortFiles(std::vector<std::string> files, std::string destPath, const std::shared_ptr<Word2Vec> &word2vec) {
     std::vector<std::unique_ptr<BufferedReader>> openedFiles;
     for (int32_t i = 0; i < len(files); i++) {
@@ -86,6 +90,7 @@ private:
     }
   }
 
+  // Функция, осуществляющая сортировку одного файла
   static void sortFile(std::string sourceFile, std::string destFile, const std::shared_ptr<Word2Vec> &word2vec) {
     LOGGER() << "Sorting file " << sourceFile << " into " << destFile << std::endl;
     auto fin = std::make_unique<BufferedReader>(sourceFile);

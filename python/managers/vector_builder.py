@@ -89,7 +89,7 @@ class VectorBuilder:
         return "".join(reversed(w1)), "".join(reversed(w4))
 
     def predict_vector(self, word):
-        if word in self.word_count and self.word_count[word] >= 100:
+        if word in self.word2vec.word_list and self.word_count[word] >= 100:
             return self.word2vec.syn0[self.word2vec.vocab[word].index]
         for prefix in range(len(word)):
             for suffix in range(prefix + 1, len(word)):

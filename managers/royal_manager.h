@@ -11,6 +11,7 @@
 #include "filter_transformation_manager.h"
 #include "classes_distribution_manager.h"
 
+// Главный менеджер данной программы: осуществляет через остальные менеджеры посчет преобразований, фильтрацию и насчет распределения по классам
 class RoyalManager {
 public:
   RoyalManager(std::shared_ptr<Word2Vec> word2vec) : word2vec(word2vec) { }

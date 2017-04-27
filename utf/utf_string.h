@@ -12,6 +12,8 @@
 #include <string>
 #include <algorithm>
 
+
+// Структура для хранения UTF8 строки
 class utf_string {
 public:
   utf_string(const std::string &string = "") {

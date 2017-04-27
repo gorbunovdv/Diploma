@@ -9,11 +9,13 @@
 #include <algorithm>
 #include "../utf/utf_string.h"
 
+// Структура для хранения слова в Word2Vec (индекс, слово, вектор)
 struct Vocab {
   int32_t index;
   utf_string word;
   std::shared_ptr<std::vector<float>> syn0;
 
+  // Найти структуру для перевернутого слова
   std::shared_ptr<Vocab> reverse() {
     auto reversed = std::make_shared<Vocab>();
     reversed->index = index;

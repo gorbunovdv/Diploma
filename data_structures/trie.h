@@ -13,10 +13,12 @@
 #include "../Word2Vec/word2vec.h"
 #include "../structures/vocab.h"
 
+// Класс для хранения префиксного дерева
 class Trie {
 public:
   Trie() = default;
 
+  // Структура одной вершины  префиксного дерева
   struct TrieNode {
     std::vector<int32_t> ends;
     std::map<int32_t, std::shared_ptr<TrieNode>> go;
@@ -24,6 +26,7 @@ public:
     int height;
   };
 
+  // Добавление строки в префиксное дерево
   void addString(std::shared_ptr<Vocab> entity) {
     auto currentNode = root;
     for (auto currentSymbol : entity->word) {
@@ -38,11 +41,13 @@ public:
     currentNode->ends.push_back(entity->index);
   }
 
+  // Насчитать эйлеров обход префиксного дерева
   void buildInOut() {
     buildInOut(root);
     std::sort(euler.begin(), euler.end());
   }
 
+  // Возвращает количество вершин
   int32_t vecticesCount() const {
     return verticesCount;
   }
@@ -51,6 +56,7 @@ public:
   std::vector<std::shared_ptr<TrieNode>> nodes;
 
 private:
+  // Обход в глубину, насчитывающий времена входа, времена выхода вершин, а также эйлеров обход
   void buildInOut(std::shared_ptr<TrieNode> vertex, int height = 0) {
     vertex->in = timer++;
     vertex->height = height;
