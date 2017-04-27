@@ -1,0 +1,126 @@
+Данная программа улучшает Word2Vec для заданного корпуса текстов, улучшая вектора для редко использующихся слов.
+
+[Необходимые библиотеки]
+
+Для работы данной программы (используя интерпретатор CPython) необходимо поставить следующие пакеты Ubuntu:
+
+sudo apt-get install g++ git cmake python libjemalloc-dev python-pip,
+
+а также следующие пакеты pip:
+
+pip install numpy pathos.
+
+Также требуется установить последнюю версию jsoncpp с помощью скрипта install_jsoncpp.sh:
+
+bash install_jsoncpp.sh.
+
+Внимание! Для улучшенной скорости работы данной программы (ускорение ~5 раз) рекомендуется использовать интерпретатор PyPy. Для этого нужно установить следующие пакеты Ubuntu:
+
+sudo apt-get install pypy pypy-dev virtualenvwrapper,
+
+создать новый virtualenv для PyPy:
+
+mkvirtualenv pypy-diploma -p /usr/bin/pypy,
+
+установить pathos:
+
+pip install pathos,
+
+установить numpy, скорректированный специально для pypy:
+
+bash install_pypy.sh.
+
+[Компиляция С++ части]
+
+Вся программа написана частично на C++, частично на Python. В проекте C++ используется система сборки CMake. Для компиляции проекта требуется запустить скрипт compile_cpp.sh:
+
+bash compile_cpp.sh.
+
+[Подготовка директорий проекта]
+
+Для создания необходимых дефолтных поддиректорий требуется запустить скрипт prepare_folders.sh:
+
+bash prepare_folders.sh.
+
+[Подготовка модели Word2Vec]
+
+Для тренировки исходной модели Word2Vec потребуется изначальный корпус текстов. В экспериментах использовался корпус текстов wiki_raw.norm.
+Чтобы натренировать модель с дефолтными параметрами, нужно запустить скрипт train_raw_model.sh:
+
+bash train_raw_model.sh <путь_к_файлу_с_текстами> (например, bash train_raw_model.sh ../wiki_raw.norm).
+
+По умолчанию, новая модель будет записана в файл vectors.bin. Путь к корпусу текстов нужно будет прописать в конфиге программы (см. формат конфига)
+
+[Формат конфига]
+
+По умолчанию, конфиг представляет из себя JSON-файл следующего вида:
+
+{
+  "word2vec" : {
+    "model" : "vectors",
+    "path" : "./vectors.bin",
+    "valid_letters": "йцукенгшщзфывапролдячсмитьёЁЙЦУКЕНГШЩЗФЫВАПРОЛДЯЧСМИТЬ-"
+  },
+  "transformations_iterator" : {
+    "max_transformations_count_in_file" : 150000000
+  },
+  "parameters" : {
+    "transformations_build" : {
+      "remove_add_symbols_count" : 3,
+      "total_changes_count" : 6,
+      "use_shortest_transformations" : true,
+      "result_path": "./results/transformations_build"
+    },
+    "transformations_filter": {
+      "sorted_each_path": "./results/sorted_each",
+      "sorted_path": "./results/sorted",
+      "filtered_path": "./results/filtered",
+      "min_transformations_in_class": 100
+    },
+    "nearest_neighbours": {
+      "topk": 50,
+      "path": "./results/nearest_neighbours/result.txt"
+    },
+    "morphological_transformations_build": {
+      "path": "./results/morphological_transformations",
+      "min_cos": 0.5,
+      "max_rank": 30
+    },
+    "raw_model": {
+      "path": "/home/ubuntu/wiki_raw.norm"
+    },
+    "acyclic_graph": {
+      "path": "./results/acyclic_graph/"
+    }
+  }
+}
+
+Описание параметров:
+word2vec:model => название модели Word2Vec,
+word2vec:path => путь к файлу с моделью Word2Vec,
+word2vec:valid_letters => какие буквы могут использоваться в словах данной модели. Остальные слова будут отсечены и не будут рассматриваться,
+transformations_iterator:max_transformations_count_in_file => максимальное количество преобразований в одном файле. Параметр используется для внешней сортировки всех преобразований. Как правильно, нужно ставить такую величину, чтобы такое количество преобразований без труда помещалось в оперативную память компьютера.
+parameters:transformations_build:remove_add_symbols_count => максимальное количество удаленных/добавленных символов в преобразовании,
+parameters:transformations_build:total_changes_count => максимальное суммарное количество улаленных и добавленных символов в преобразовании. Для экспериментов нужно ставить величину, в два раза большую, чем remove_add_symbols_count, чтобы этот параметр ни на что не влиял,
+parameters:transformations_build:use_shortest_transformations => использовать ли самое короткое преобразование между двумя словами или учитывать все преобразования между двумя словами,
+parameters:transformations_build:result_path => путь для хранения результатов подсчета преобразований,
+parameters:transformations_filter:sorted_each_path => путь для хранения отсортированных отдельных файлов с преобразованиями,
+parameters:transformations_filter:sorted_path => путь для хранения отсортированных преобразований,
+parameters:transformations_filter:filtered_path => путь для хранения отфильтрованных по числу преобразований классов преобразований,
+parameters:transformations_filter:min_transformations_in_class => минимальное число преобразований в классе, остальные классы не будут учитываться,
+parameters:nearest_neighbours:topk => количество ближайших соседей, которые будут храниться,
+parameters:nearest_neighbours:path => путь для хранения ближайших соседей,
+parameters:morphological_transformations_build:path => путь для хранения насчитанных морфологических преобразований,
+parameters:morphological_transformations_build:min_cos => минимальная косинусная метрика морфологических преобразований,
+parameters:morphological_transformations_build:max_rank => максимальный ранг морфологических преобразований,
+parameters:raw_model:path => путь к корпусу текстов, по которому насчитана модель Word2Vec,
+parameters:acyclic_graph:path => путь для хранения насчитанного ациклического графа.
+
+По дефолту можно использовать конфиг amazon_config_ru_big.json, за одним изменением в пути к корпусу текстов, на котором тренировали Word2Vec с помощью train_raw_model.sh.
+
+[Запуск программы]
+
+Запуск программы происходит с помощью двух команд:
+
+./build/Diploma <путь_к_конфигу>
+PYTHONPATH="." python python/main.py <путь_к_конфигу>
