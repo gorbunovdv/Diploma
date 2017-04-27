@@ -1,3 +1,5 @@
+# coding=utf-8
+
 from random import shuffle
 
 import numpy
@@ -9,8 +11,13 @@ from python.transformations_iterator.transformations_iterator import Transformat
 
 logger = Logger("MorphologicalTransformationManager")
 
-
+"""
+    Менеджер для подсчета морфологических преобразований по обычным преобразованиям
+"""
 class MorphologicalTransformationManager:
+    """
+        Функция для подсчета морфологических преобразований по обычным преобразованиям
+    """
     @classmethod
     def calculate_morphological_transformations(cls, word2vec, word_count_manager):
         fout = open(config["parameters"]["morphological_transformations_build"]["path"] + "/result.txt", "w")
@@ -38,6 +45,9 @@ class MorphologicalTransformationManager:
             classTicker()
         fout.close()
 
+    """
+        Функция для подсчета морфологических преобразований внутри данного класса обычных преобразований
+    """
     @classmethod
     def process_class(cls, clazz, word2vec, syn0norm, fout, nearest_neighbours):
         PA, B = syn0norm[[transformation.from_word for transformation in clazz]], syn0norm[[transformation.to_word for transformation in clazz]]

@@ -1,9 +1,13 @@
+# coding=utf-8
+
 import time
 import multiprocessing
 
 from datetime import datetime
 
-
+"""
+    Класс для удобного логирования на экран
+"""
 class Logger:
     def __init__(self, name):
         self.name = name
@@ -11,7 +15,9 @@ class Logger:
     def info(self, message):
         print("{}: [{}] -> {}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()), self.name, message))
 
-
+"""
+    Класс для удобного вывода прогресса на экран
+"""
 class Ticker:
     lock = multiprocessing.Lock()
 
@@ -42,7 +48,9 @@ class Ticker:
                              .format(self.name, self.current_ticks,
                                      1. * self.current_ticks / seconds, 1. * seconds / self.current_ticks))
 
-
+"""
+    Генератор для удобного вывода прогресса по iterable на экран
+"""
 def IterableTicker(logger, iterable, step=10000):
     ticker = Ticker(logger, 0, type(iterable).__name__, step)
     for object in iterable:
