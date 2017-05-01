@@ -15,14 +15,14 @@ class RoyalManager:
         self.word2vec = word2vec
 
     def run(self):
-        #NearestNeighboursManager.calculate_nearest_neighbours(self.word2vec)
-        #word_count_manager = WordCountManager()
-        #MorphologicalTransformationManager.calculate_morphological_transformations(self.word2vec, word_count_manager)
-        #AcyclicGraphManager.calculate_acyclic_graph(self.word2vec, word_count_manager)
-        #vocab = Word2VecConstructor.construct(self.word2vec, word_count_manager.count)
+        NearestNeighboursManager.calculate_nearest_neighbours(self.word2vec)
+        word_count_manager = WordCountManager()
+        MorphologicalTransformationManager.calculate_morphological_transformations(self.word2vec, word_count_manager)
+        AcyclicGraphManager.calculate_acyclic_graph(self.word2vec, word_count_manager)
+        vocab = Word2VecConstructor.construct(self.word2vec, word_count_manager.count)
         initial_vocab = self.word2vec.generate_vocab()
         for dataset in config["parameters"]["evaluation"]["dataset_paths"]:
-            for vc, name in [(initial_vocab, "initial_vocab")]: # [(vocab, "vocab"), (initial_vocab, "initial_vocab")]:
+            for vc, name in [(vocab, "vocab"), (initial_vocab, "initial_vocab")]:
                 fin = open(dataset, "r")
                 fout = open(config["parameters"]["evaluation"]["result_folder"] + "/" + dataset.replace("/", "__") + name, "w")
                 EvaluateManager.evaluate(fin, fout, vc)
