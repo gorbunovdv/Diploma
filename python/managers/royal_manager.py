@@ -24,6 +24,6 @@ class RoyalManager:
         for dataset in config["parameters"]["evaluation"]["dataset_paths"]:
             for vc, name in [(vocab, "vocab"), (initial_vocab, "initial_vocab")]:
                 fin = open(dataset, "r")
-                fout = open(config["parameters"]["evaluation"]["result_folder"] + "/" + dataset.replace("/", "__") + name, "w")
+                fout = open(config["parameters"]["evaluation"]["result_folder"] + "/" + dataset.replace("/", "__") + '__' + name, "w")
                 EvaluateManager.evaluate(fin, fout, vc)
                 fout.close()
