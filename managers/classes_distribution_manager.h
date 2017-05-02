@@ -17,6 +17,9 @@ public:
     TransformationsReader reader(path, word2vec);
     reader.foreachClass(word2vec, [this, &word2vec](const std::vector<Transformation> &transformations){
       RESULT() << transformations.back().getClass(word2vec) << " : " << len(transformations) << std::endl;
+      for (Transformation transformation : transformations) {
+        transformation.print(word2vec);
+      }
       this->classesDistribution[len(transformations)]++;
     });
     for (auto i : classesDistribution) {
