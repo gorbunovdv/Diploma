@@ -33,6 +33,6 @@ class EvaluateManager:
                 fout.write(',')
                 fout.write(sim)
                 fout.write(',')
-                fout.write(str(cos))
+                fout.write(str(abs(cos)))
                 fout.write("\n")
         fout.close()
