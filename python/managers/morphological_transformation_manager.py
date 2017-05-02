@@ -21,6 +21,7 @@ class MorphologicalTransformationManager:
     @classmethod
     def calculate_morphological_transformations(cls, word2vec, word_count_manager):
         fout = open(config["parameters"]["morphological_transformations_build"]["path"] + "/result.txt", "w")
+        example_fout = open(config["parameters"]["morphological_transformations_build"]["path"] + "/examples.txt", "w")
         reader = TransformationsReader(config["parameters"]["transformations_filter"]["filtered_path"])
         classTicker = Ticker(logger, 0, "classTicker", 100)
         classTicker2 = Ticker(logger, 0, "splitClassTicker", 100)
@@ -38,7 +39,7 @@ class MorphologicalTransformationManager:
             split_count = (len(clazz) + PIECE - 1) / PIECE
             for i in range(split_count):
                 l, r = max(0, min(i * PIECE, len(clazz) - PIECE)), min(len(clazz), (i + 1) * PIECE)
-                cls.process_class(clazz[l:r], word2vec, syn0norm, fout, nearest_neighbours)
+                cls.process_class(clazz[l:r], word2vec, syn0norm, fout, nearest_neighbours, example_fout)
                 classTicker2()
             if split_count > 1:
                 logger.info("Split class with size {} into {} pieces".format(len(clazz), split_count))
@@ -49,7 +50,7 @@ class MorphologicalTransformationManager:
         Функция для подсчета морфологических преобразований внутри данного класса обычных преобразований
     """
     @classmethod
-    def process_class(cls, clazz, word2vec, syn0norm, fout, nearest_neighbours):
+    def process_class(cls, clazz, word2vec, syn0norm, fout, nearest_neighbours, example_fout=None):
         PA, B = syn0norm[[transformation.from_word for transformation in clazz]], syn0norm[[transformation.to_word for transformation in clazz]]
         threshold = nearest_neighbours[[transformation.to_word for transformation in clazz]]
         for i in range(len(clazz)):
@@ -62,3 +63,12 @@ class MorphologicalTransformationManager:
             for index in indices:
                 if index != i:
                     fout.write("%d %d %d %d\n" % (clazz[index].from_word, clazz[index].to_word, clazz[i].from_word, clazz[i].to_word))
+                    if example_fout is not None:
+                        example_fout.write("%s %s %s %s\n" % (word2vec.vocab[clazz[index].from_word].word.encode(
+                                                                  'utf-8'),
+                                                              word2vec.vocab[clazz[index].to_word].word.encode(
+                                                                  'utf-8'),
+                                                              word2vec.vocab[clazz[i].from_word].word.encode(
+                                                                  'utf-8'),
+                                                              word2vec.vocab[clazz[i].to_word].word.encode(
+                                                                  'utf-8')))
