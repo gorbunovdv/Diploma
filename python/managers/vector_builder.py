@@ -55,8 +55,6 @@ class VectorBuilder:
         print "Max length: ", max(length)
 
         for i in range(len(transformation)):
-            if length[i] <= 3:
-                continue
             p_delete, p_add, s_delete, s_add = transformation[i]
             transformations[p_delete][s_delete].append((p_add, s_add, length[i]))
 
@@ -113,6 +111,7 @@ class VectorBuilder:
                         best = result
         if best != "":
             return self.word2vec.vocab[best].syn0
+
         if word in self.word2vec.vocab:
             return self.word2vec.vocab[word].syn0
         return None
