@@ -25,7 +25,8 @@ class EvaluateManager:
                         logger.info((word2 + u": not found!").encode('utf-8'))
                     logger.info((u"Pair was " + word1 + " -> " + word2).encode('utf-8'))
                 else:
-                    cos = numpy.dot(vocab[word1] / numpy.linalg.norm(vocab[word1]), vocab[word2]  / numpy.linalg.norm(vocab[word2]))
+                    cos = numpy.dot(vocab[word1] / numpy.linalg.norm(vocab[word1]),
+                                    vocab[word2] / numpy.linalg.norm(vocab[word2]))
                 fout.write(word1.encode('utf-8'))
                 fout.write(',')
                 fout.write(word2.encode('utf-8'))
