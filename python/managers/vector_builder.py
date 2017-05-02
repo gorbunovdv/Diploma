@@ -110,4 +110,6 @@ class VectorBuilder:
                     result = add_left + word[prefix + 1:suffix] + add_right
                     if result in self.word2vec.vocab and self.word_count[result] >= 100:
                         return self.word2vec.syn0[self.word2vec.vocab[result].index]
+        if word in self.word2vec.vocab:
+            return self.word2vec.vocab[word].syn0
         return None
