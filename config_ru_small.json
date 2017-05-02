@@ -2,7 +2,7 @@
   "word2vec" : {
     "model" : "vectors10",
     "path" : "./vectors.bin",
-    "valid_letters": "йцукенгшщзфывапролдячсмитьёЁЙЦУКЕНГШЩЗФЫВАПРОЛДЯЧСМИТЬ-"
+    "valid_letters": "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧХЩЪЫЬЭЮЯ-"
   },
   "transformations_iterator" : {
     "max_transformations_count_in_file" : 150000000
