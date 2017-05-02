@@ -37,6 +37,8 @@ PYTHONPATH="." python python/main.py amazon_config_ru_big.sh
 
 sudo apt-get install g++ git cmake python python-dev libjemalloc-dev python-pip,
 
+(требуется компилятор g++ версии не менее 5.4.0),
+
 а также следующие пакеты pip:
 
 pip install numpy pathos.
