@@ -23,10 +23,17 @@ class AcyclicGraphManager:
         morphological_transformations = (map(int, line.split()) for line in IterableTicker(logger, open(config["parameters"]["morphological_transformations_build"]["path"] + "/result.txt"), 10 ** 6))
         logger.info("Read all morphological transformations")
         fout = open(config["parameters"]["acyclic_graph"]["path"] + "/result.txt", "w")
+        example_fout = open(config["parameters"]["acyclic_graph"]["path"] + "/example.txt", "w")
         for edge in cls.calc_acyclic_graph(word2vec, morphological_transformations, word_count_manager):
             if edge is not None:
                 fout.write("%d %d %d %d\n" % edge)
+                w1, w2, w3, w4 = edge
+                example_fout.write("%s %s %s %s\n" % (word2vec.index2word[w1].word.encode('utf-8'),
+                                                      word2vec.index2word[w2].word.encode('utf-8'),
+                                                      word2vec.index2word[w3].word.encode('utf-8'),
+                                                      word2vec.index2word[w4].word.encode('utf-8')))
         fout.close()
+        example_fout.close()
 
     """
         Функция для подсчета ациклического графа по морфологическим преобразованиям

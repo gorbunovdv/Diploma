@@ -45,6 +45,7 @@ class MorphologicalTransformationManager:
                 logger.info("Split class with size {} into {} pieces".format(len(clazz), split_count))
             classTicker()
         fout.close()
+        example_fout.close()
 
     """
         Функция для подсчета морфологических преобразований внутри данного класса обычных преобразований
