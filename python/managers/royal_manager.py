@@ -1,11 +1,14 @@
 # coding=utf-8
 from python.config.config import config
+from python.logger.logger import Logger
 from python.managers.acyclic_graph_manager import AcyclicGraphManager
 from python.managers.evaluate_manager import EvaluateManager
 from python.managers.morphological_transformation_manager import MorphologicalTransformationManager
 from python.managers.nearest_neighbours_manager import NearestNeighboursManager
 from python.managers.word2vec_constructor import Word2VecConstructor
 from python.managers.word_count_manager import WordCountManager
+
+logger = Logger("RoyalManager")
 
 """
     Главный менеджер программы: осуществляет подсчет ближайших соседей, подсчет морфологических преобразований, подсчет ациклического графа, подсчет новых векторов и записать новых моделей Word2Vec
@@ -24,6 +27,7 @@ class RoyalManager:
         for dataset in config["parameters"]["evaluation"]["dataset_paths"]:
             for vc, name in [(vocab, "vocab"), (initial_vocab, "initial_vocab")]:
                 fin = open(dataset, "r")
-                fout = open(config["parameters"]["evaluation"]["result_folder"] + "/" + dataset.replace("/", "__") + '__' + name, "w")
+                fout = open(config["parameters"]["evaluation"]["result_folder"] + "/" + dataset.replace("/", "__").replace(".", "") + '__' + name, "w")
+                logger.info("Path: {}".format(config["parameters"]["evaluation"]["result_folder"] + "/" + dataset.replace("/", "__") + '__' + name))
                 EvaluateManager.evaluate(fin, fout, vc)
                 fout.close()
