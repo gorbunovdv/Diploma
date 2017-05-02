@@ -64,11 +64,11 @@ class MorphologicalTransformationManager:
                 if index != i:
                     fout.write("%d %d %d %d\n" % (clazz[index].from_word, clazz[index].to_word, clazz[i].from_word, clazz[i].to_word))
                     if example_fout is not None:
-                        example_fout.write("%s %s %s %s\n" % (word2vec.vocab[clazz[index].from_word].word.encode(
+                        example_fout.write("%s %s %s %s\n" % (word2vec.index2word[clazz[index].from_word].word.encode(
                                                                   'utf-8'),
-                                                              word2vec.vocab[clazz[index].to_word].word.encode(
+                                                              word2vec.index2word[clazz[index].to_word].word.encode(
                                                                   'utf-8'),
-                                                              word2vec.vocab[clazz[i].from_word].word.encode(
+                                                              word2vec.index2word[clazz[i].from_word].word.encode(
                                                                   'utf-8'),
-                                                              word2vec.vocab[clazz[i].to_word].word.encode(
+                                                              word2vec.index2word[clazz[i].to_word].word.encode(
                                                                   'utf-8')))
