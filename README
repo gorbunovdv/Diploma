@@ -157,3 +157,15 @@ parameters:acyclic_graph:path => путь для хранения насчита
 
 ./build/Diploma <путь_к_конфигу>
 PYTHONPATH="." python python/main.py <путь_к_конфигу>
+
+[Промежуточные результаты]
+
+Полученные морфологические преобразования с human-readable форматом можно посмотреть в ./results/morphological_transformations/examples.txt.
+Полученные ребра ациклического графа с human-readable форматом можно посмотреть в ./results/acyclic_graph/examples.txt.
+
+[Итоговые результаты]
+
+Итоговые csv лежат в ./results/evaluation/. Чтобы узнать корреляцию Пирсона/Спирмана на конкретной csv <csv_filename>, нужно запустить следующее:
+
+python russe-evaluation/russe/evaluation/evaluate.py hj --hj_fpath=<csv_filename>
+
