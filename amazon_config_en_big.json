@@ -37,7 +37,7 @@
     },
     "evaluation": {
       "dataset_paths": [
-        "./datasets/rw-dataset.csv",
+        "./datasets/eng-rw-dataset.csv",
         "./datasets/eng-simlex-999.csv",
         "./datasets/eng-ws353.csv"
       ],
