@@ -16,7 +16,7 @@ class VectorBuilder:
         self.mapping = defaultdict(lambda: -1)
         for word1, word2, word3, word4 in imap(lambda line: map(int, line.split()), open(graph_filename)):
             self.mapping[word1] = word2
-        self.transformation, self.length = self.calculate_rs(word2vec, self.mapping)
+        self.transformation, self.length, self.s_transformations = self.calculate_rs(word2vec, self.mapping)
         self.word_count = word_count
 
     """
@@ -51,6 +51,7 @@ class VectorBuilder:
                                                      length[mapping[word]] + 1
 
         transformations = defaultdict(lambda: defaultdict(list))
+        s_transformations = defaultdict(lambda: defaultdict(list))
 
         print "Max length: ", max(length)
 
@@ -58,7 +59,15 @@ class VectorBuilder:
             p_delete, p_add, s_delete, s_add = transformation[i]
             transformations[p_delete][s_delete].append((p_add, s_add, length[i]))
 
-        return transformations, length
+        for vertex, to_vertex in mapping.iteritems():
+            if to_vertex == -1:
+                continue
+            p_delete, p_add, s_delete, s_add = cls.composite(word2vec.index2word[vertex].word,
+                                                   word2vec.index2word[to_vertex].word,
+                                                   ('', '', '', ''))
+            s_transformations[p_delete][s_delete].append((p_add, s_add))
+
+        return transformations, length, s_transformations
 
     """
         Применить преобразование, образованное словами word1, word2 к преобразованию transformation
@@ -99,7 +108,7 @@ class VectorBuilder:
         Предсказать вектор для слова word
     """
     def predict_vector(self, word):
-        if word in self.word2vec.word_list and self.word_count[word] >= 1000:
+        if word in self.word2vec.word_list and self.word_count[word] >= 100:
             return self.word2vec.syn0[self.word2vec.vocab[word].index]
         best = ""
         for prefix in range(len(word)):
@@ -107,11 +116,20 @@ class VectorBuilder:
                 s1, s2 = word[:prefix + 1], word[suffix:]
                 for (add_left, add_right, length) in self.transformation[s1][s2]:
                     result = add_left + word[prefix + 1:suffix] + add_right
-                    if result in self.word2vec.vocab and self.word_count[result] >= 1000 and (best == "" or self.word_count[result] > self.word_count[best]):
+                    if result in self.word2vec.vocab and self.word_count[result] >= 100 and (best == "" or self.word_count[result] > self.word_count[best]):
                         best = result
         if best != "":
             return self.word2vec.vocab[best].syn0
 
         if word in self.word2vec.vocab:
             return self.word2vec.vocab[word].syn0
+
+        for prefix in range(len(word)):
+            for suffix in range(prefix + 1, len(word)):
+                s1, s2 = word[:prefix + 1], word[suffix:]
+                for (add_left, add_right) in self.s_transformations[s1][s2]:
+                    result = add_left + word[prefix + 1:suffix] + add_right
+                    if result in self.word2vec.vocab and self.word_count[result] >= 100:
+                        return self.word2vec.syn0[self.word2vec.vocab[result].index]
+
         return None

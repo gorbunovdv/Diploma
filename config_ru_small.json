@@ -18,7 +18,7 @@
       "sorted_each_path": "./results/sorted_each",
       "sorted_path": "./results/sorted",
       "filtered_path": "./results/filtered",
-      "min_transformations_in_class": 100
+      "min_transformations_in_class": 1
     },
     "nearest_neighbours": {
       "topk": 50,

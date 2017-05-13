@@ -33,7 +33,7 @@ class Ticker:
     def __call__(self):
         with Ticker.lock:
             self.current_ticks += 1
-            if (self.max_ticks == 0 and self.current_ticks % self.step == 0) or (self.max_ticks != 0 and self.current_ticks % (self.max_ticks // 1000) == 0):
+            if (self.max_ticks == 0 and self.current_ticks % self.step == 0) or (self.max_ticks != 0 and self.current_ticks % max(1, self.max_ticks // 1000) == 0):
                 self.log()
 
     def log(self):
