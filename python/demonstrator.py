@@ -35,6 +35,7 @@ while True:
         distances = sorted([(numpy.dot(vector / numpy.linalg.norm(vector), vector2 / numpy.linalg.norm(vector2)), word2) for word2, vector2 in initial_vocab.iteritems()], reverse=True)[:10]
         for distance2, word2 in distances:
             print word2, "\t" * 5, distance2, "\t" * 5, word_count_manager.count[word2]
+    print "\n" * 2
     vector = manager.predict_vector(word, print_transformation=True)
     if vector is None:
         print "Could not predict vector"
@@ -42,3 +43,4 @@ while True:
     distances = sorted([(numpy.dot(vector / numpy.linalg.norm(vector), vector2 / numpy.linalg.norm(vector2)), word2) for word2, vector2 in initial_vocab.iteritems()], reverse=True)[:10]
     for distance2, word2 in distances:
         print word2, "\t" * 5, distance2, "\t" * 5, word_count_manager.count[word2]
+    print "\n" * 2
