@@ -22,7 +22,7 @@ class Word2Vec:
         assert isinstance(fin, file)
         header = fin.readline()
         self.words_count, self.dimensions_count = map(int, header.split())
-        letters_set = set(unicode(config["word2vec"]["valid_letters"]))
+        self.letters_set = set(unicode(config["word2vec"]["valid_letters"]))
         self.index2word = []
         self.vocab = {}
         self.word_list = set()
@@ -36,7 +36,7 @@ class Word2Vec:
             cur.index = i
             try:
                 cur.word = self.read_word(fin)
-                if not self.check_if_word_is_valid(cur.word, letters_set):
+                if not self.check_if_word_is_valid(cur.word, self.letters_set):
                     add_word = False
             except Exception, e:
                 logger.info("UTF encoding failed: skipping word")

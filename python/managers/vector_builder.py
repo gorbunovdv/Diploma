@@ -107,29 +107,35 @@ class VectorBuilder:
     """
         Предсказать вектор для слова word
     """
-    def predict_vector(self, word):
+    def predict_vector(self, word, print_transformation=False):
         if word in self.word2vec.word_list and self.word_count[word] >= 100:
             return self.word2vec.syn0[self.word2vec.vocab[word].index]
         best = ""
-        for prefix in range(len(word)):
-            for suffix in range(prefix + 1, len(word)):
+        for prefix in range(-1, len(word)):
+            for suffix in range(prefix + 1, len(word) + 1):
                 s1, s2 = word[:prefix + 1], word[suffix:]
                 for (add_left, add_right, length) in self.transformation[s1][s2]:
                     result = add_left + word[prefix + 1:suffix] + add_right
                     if result in self.word2vec.vocab and self.word_count[result] >= 100 and (best == "" or self.word_count[result] > self.word_count[best]):
                         best = result
         if best != "":
+            if print_transformation:
+                print word, ' -> ', best
             return self.word2vec.vocab[best].syn0
 
-        if word in self.word2vec.vocab:
-            return self.word2vec.vocab[word].syn0
-
-        for prefix in range(len(word)):
-            for suffix in range(prefix + 1, len(word)):
+        for prefix in range(-1, len(word)):
+            for suffix in range(prefix + 1, len(word) + 1):
                 s1, s2 = word[:prefix + 1], word[suffix:]
                 for (add_left, add_right) in self.s_transformations[s1][s2]:
                     result = add_left + word[prefix + 1:suffix] + add_right
                     if result in self.word2vec.vocab and self.word_count[result] >= 100:
+                        if print_transformation:
+                            print word, ' -> ', result
                         return self.word2vec.syn0[self.word2vec.vocab[result].index]
+
+        if word in self.word2vec.vocab:
+            if print_transformation:
+                print "Could not find transformation: using Word2Vec vector"
+            return self.word2vec.vocab[word].syn0
 
         return None
