@@ -56,6 +56,8 @@ class VectorBuilder:
         print "Max length: ", max(length)
 
         for i in range(len(transformation)):
+            if transformation[i] == ('', '', '', ''):
+                continue
             p_delete, p_add, s_delete, s_add = transformation[i]
             transformations[p_delete][s_delete].append((p_add, s_add, length[i]))
 
@@ -65,6 +67,8 @@ class VectorBuilder:
             p_delete, p_add, s_delete, s_add = cls.composite(word2vec.index2word[vertex].word,
                                                    word2vec.index2word[to_vertex].word,
                                                    ('', '', '', ''))
+            if (p_delete, p_add, s_delete, s_add) == ('', '', '', ''):
+                continue
             s_transformations[p_delete][s_delete].append((p_add, s_add))
 
         return transformations, length, s_transformations
