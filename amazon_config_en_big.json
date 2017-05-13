@@ -1,0 +1,47 @@
+{
+  "word2vec" : {
+    "model" : "vectors10",
+    "path" : "./vectors.bin",
+    "valid_letters": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-"
+  },
+  "transformations_iterator" : {
+    "max_transformations_count_in_file" : 150000000
+  },
+  "parameters" : {
+    "transformations_build" : {
+      "remove_add_symbols_count" : 3,
+      "total_changes_count" : 6,
+      "use_shortest_transformations" : true,
+      "result_path": "./results/transformations_build"
+    },
+    "transformations_filter": {
+      "sorted_each_path": "./results/sorted_each",
+      "sorted_path": "./results/sorted",
+      "filtered_path": "./results/filtered",
+      "min_transformations_in_class": 100
+    },
+    "nearest_neighbours": {
+      "topk": 50,
+      "path": "./results/nearest_neighbours/result.txt"
+    },
+    "morphological_transformations_build": {
+      "path": "./results/morphological_transformations",
+      "min_cos": 0.5,
+      "max_rank": 30
+    },
+    "raw_model": {
+      "path": "/home/ubuntu/wiki_raw.norm"
+    },
+    "acyclic_graph": {
+      "path": "./results/acyclic_graph/"
+    },
+    "evaluation": {
+      "dataset_paths": [
+        "./russe-evaluation/russe/evaluation/rw-dataset.csv",
+        "./russe-evaluation/russe/evaluation/eng-simlex-999.csv",
+        "./russe-evaluation/russe/evaluation/eng-ws353.csv"
+      ],
+      "result_folder": "./results/evaluation"
+    }
+  }
+}
