@@ -18,7 +18,6 @@ with open(model_path, "r") as fin:
 
 word_count_manager = WordCountManager()
 manager = VectorBuilder(word2vec, word_count_manager)
-vocab = Word2VecConstructor.construct(word2vec, word_count_manager.count)
 initial_vocab = word2vec.generate_vocab()
 
 while True:
@@ -36,14 +35,10 @@ while True:
         distances = sorted([(numpy.dot(vector / numpy.linalg.norm(vector), vector2 / numpy.linalg.norm(vector2)), word2) for word2, vector2 in initial_vocab.iteritems()], reverse=True)[:10]
         for distance2, word2 in distances:
             print word2, "\t" * 3, distance2, "\t" * 3, word_count_manager.count[word2]
-    if word not in vocab:
-        print "Word is not in Vocab: calculating vector"
-        vector = manager.predict_vector(word, print_transformation=True)
-        if vector is None:
-            print "Could not predict vector"
-            continue
-    else:
-        vector = vocab[word]
-    distances = sorted([(numpy.dot(vector / numpy.linalg.norm(vector), vector2 / numpy.linalg.norm(vector2)), word2) for word2, vector2 in vocab.iteritems()], reverse=True)[:10]
+    vector = manager.predict_vector(word, print_transformation=True)
+    if vector is None:
+        print "Could not predict vector"
+        continue
+    distances = sorted([(numpy.dot(vector / numpy.linalg.norm(vector), vector2 / numpy.linalg.norm(vector2)), word2) for word2, vector2 in initial_vocab.iteritems()], reverse=True)[:10]
     for distance2, word2 in distances:
         print word2, "\t" * 3, distance2, "\t" * 3, word_count_manager.count[word2]
