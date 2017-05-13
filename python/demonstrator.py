@@ -34,11 +34,11 @@ while True:
         print "Frequency is {}".format(word_count_manager.count[word])
         distances = sorted([(numpy.dot(vector / numpy.linalg.norm(vector), vector2 / numpy.linalg.norm(vector2)), word2) for word2, vector2 in initial_vocab.iteritems()], reverse=True)[:10]
         for distance2, word2 in distances:
-            print word2, "\t" * 3, distance2, "\t" * 3, word_count_manager.count[word2]
+            print word2, "\t" * 5, distance2, "\t" * 5, word_count_manager.count[word2]
     vector = manager.predict_vector(word, print_transformation=True)
     if vector is None:
         print "Could not predict vector"
         continue
     distances = sorted([(numpy.dot(vector / numpy.linalg.norm(vector), vector2 / numpy.linalg.norm(vector2)), word2) for word2, vector2 in initial_vocab.iteritems()], reverse=True)[:10]
     for distance2, word2 in distances:
-        print word2, "\t" * 3, distance2, "\t" * 3, word_count_manager.count[word2]
+        print word2, "\t" * 5, distance2, "\t" * 5, word_count_manager.count[word2]
