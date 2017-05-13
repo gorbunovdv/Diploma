@@ -37,7 +37,9 @@
     },
     "evaluation": {
       "dataset_paths": [
-        "./russe-evaluation/russe/evaluation/hj.csv"
+        "./datasets/rus-hj.csv",
+        "./datasets/rus-ws353.csv",
+        "./datasets/rus-simlex-999.csv"
       ],
       "result_folder": "./results/evaluation"
     }
