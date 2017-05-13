@@ -17,7 +17,7 @@ with open(model_path, "r") as fin:
     word2vec = Word2Vec(fin)
 
 word_count_manager = WordCountManager()
-manager = VectorBuilder(word2vec, word_count_manager)
+manager = VectorBuilder(word2vec, word_count_manager.count)
 initial_vocab = word2vec.generate_vocab()
 
 while True:
