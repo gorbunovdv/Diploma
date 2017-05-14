@@ -37,11 +37,11 @@ struct Word2Vec {
         cur->word = read_word(file->asFilePointer());
         if (!check_if_word_is_valid(cur->word, letters_list)) {
           addWord = false;
-          skipWord = true;
         }
       } catch (std::exception e) {
         LOGGER() << "UTF8 decoding failed: skipping word" << std::endl;
         addWord = false;
+        skipWord = true;
       }
       cur->syn0 = std::make_shared<std::vector<float>>(static_cast<size_t>(dimensionsCount));
       fread(&cur->syn0->front(), sizeof(float), static_cast<size_t>(dimensionsCount), file->asFilePointer());
