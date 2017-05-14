@@ -7,4 +7,4 @@ cd word2vec
 make
 
 cd ..
-./word2vec/word2vec -train $1 -output vectors.bin -cbow 1 -size 10 -window 3 -negative 2 -hs 0 -sample 1e-5 -threads 4 -binary 1 -iter 1 -min-count 10
+./word2vec/word2vec -train $1 -output vectors.bin -cbow 1 -size 100 -window 10 -negative 10 -hs 0 -sample 1e-5 -threads 10 -binary 1 -iter 3 -min-count 10 -save-vocab vectors.vocab

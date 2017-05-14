@@ -8,8 +8,8 @@ bash install_jsoncpp.sh
 bash compile_cpp.sh
 bash prepare_folders.sh
 bash train_raw_model.sh /home/ubuntu/wiki_raw.norm
-./build/Diploma amazon_config_ru_big.sh
-PYTHONPATH="." python python/main.py amazon_config_ru_big.sh
+./build/Diploma amazon_config_ru_big.json
+PYTHONPATH="." python python/main.py amazon_config_ru_big.json
 
 Для запуска с PyPy требуется:
 
@@ -22,8 +22,8 @@ bash install_jsoncpp.sh
 bash compile_cpp.sh
 bash prepare_folders.sh
 bash train_raw_model.sh /home/ubuntu/wiki_raw.norm
-./build/Diploma amazon_config_ru_big.sh
-PYTHONPATH="." python python/main.py amazon_config_ru_big.sh
+./build/Diploma amazon_config_ru_big.json
+PYTHONPATH="." python python/main.py amazon_config_ru_big.json
 
 [ReadMe]
 
@@ -168,4 +168,10 @@ PYTHONPATH="." python python/main.py <путь_к_конфигу>
 Итоговые csv лежат в ./results/evaluation/. Чтобы узнать корреляцию Пирсона/Спирмана на конкретной csv <csv_filename>, нужно запустить следующее:
 
 python russe-evaluation/russe/evaluation/evaluate.py hj --hj_fpath=<csv_filename>
+
+[Демонстрация]
+
+Чтобы запустить демонстрацию, нужно запустить следующую команду:
+
+PYTHONPATH="." python python/demonstrator.py <путь_к_конфигу>
 
