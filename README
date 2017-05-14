@@ -10,6 +10,7 @@ bash prepare_folders.sh
 bash train_raw_model.sh /home/ubuntu/wiki_raw.norm
 ./build/Diploma amazon_config_ru_big.json
 PYTHONPATH="." python python/main.py amazon_config_ru_big.json
+bash evaluate_results.sh
 
 Для запуска с PyPy требуется:
 
@@ -24,6 +25,7 @@ bash prepare_folders.sh
 bash train_raw_model.sh /home/ubuntu/wiki_raw.norm
 ./build/Diploma amazon_config_ru_big.json
 PYTHONPATH="." python python/main.py amazon_config_ru_big.json
+bash evaluate_results.sh
 
 [ReadMe]
 
@@ -168,6 +170,10 @@ PYTHONPATH="." python python/main.py <путь_к_конфигу>
 Итоговые csv лежат в ./results/evaluation/. Чтобы узнать корреляцию Пирсона/Спирмана на конкретной csv <csv_filename>, нужно запустить следующее:
 
 python russe-evaluation/russe/evaluation/evaluate.py hj --hj_fpath=<csv_filename>
+
+Чтобы узнать корреляции Спирмана/Пирсона на всех датасетах, нужно запустить скрипт:
+
+bash evaluate_results.sh
 
 [Демонстрация]
 
