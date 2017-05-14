@@ -11,7 +11,7 @@ logger = Logger("EvaluateManager")
 class EvaluateManager:
     @staticmethod
     def evaluate(fin, fout, vocab):
-        for word1, word2, sim in imap(lambda line: line.strip().split(","), fin):
+        for word1, word2, sim in imap(lambda line: line.strip().split(","), fin.read().strip().split("\n")):
             if word1 == 'word1' and word2 == 'word2' and sim == 'sim':
                 fout.write("{},{},{},{}\n".format(word1, word2, sim, 'usim'))
             else:
