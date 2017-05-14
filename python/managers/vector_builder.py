@@ -124,7 +124,7 @@ class VectorBuilder:
         Предсказать вектор для слова word
     """
     def predict_vector(self, word, print_transformation=False, demonstration=False):
-        if demonstration and word in self.word2vec.word_list and self.word_count[word] >= 100:
+        if not demonstration and word in self.word2vec.word_list and self.word_count[word] >= 100:
             return self.word2vec.syn0[self.word2vec.vocab[word].index]
         best = ""
         for prefix in range(-1, len(word)):
@@ -274,7 +274,7 @@ class OffsetVectorBuilder:
         Предсказать вектор для слова word
     """
     def predict_vector(self, word, print_transformation=False, demonstration=False):
-        if demonstration and word in self.word2vec.word_list and self.word_count[word] >= 100:
+        if not demonstration and word in self.word2vec.word_list and self.word_count[word] >= 100:
             return self.word2vec.syn0[self.word2vec.vocab[word].index]
         best = ""
         best_offset = None
