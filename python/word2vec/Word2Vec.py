@@ -52,7 +52,7 @@ class Word2Vec:
                 self.word_list.add(cur.word)
             else:
                 if not skip_word:
-                    fout.write(cur.word)
+                    fout.write(cur.word.encode('utf-8'))
                 i -= 1
                 self.words_count -= 1
                 deleted_words += 1
