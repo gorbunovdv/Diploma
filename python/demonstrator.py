@@ -23,7 +23,11 @@ initial_vocab = word2vec.generate_vocab()
 
 while True:
     word = raw_input("Enter single word: ")
-    word = to_unicode(word)
+    try:
+        word = to_unicode(word)
+    except UnicodeDecodeError:
+        print "Could not decode the word"
+        continue
     if not word2vec.check_if_word_is_valid(word, word2vec.letters_set):
         print "Word contains inadequate symbols"
         continue
