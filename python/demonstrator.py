@@ -41,7 +41,7 @@ while True:
         for distance2, word2 in distances:
             print word2, "\t" * 5, distance2, "\t" * 5, word_count_manager.count[word2]
     print "\n" * 2
-    vector = manager.predict_vector(word, print_transformation=True)
+    vector = manager.predict_vector(word, print_transformation=True, demonstration=True)
     if vector is None:
         print "Could not predict vector"
         continue
@@ -49,7 +49,7 @@ while True:
     for distance2, word2 in distances:
         print word2, "\t" * 5, distance2, "\t" * 5, word_count_manager.count[word2]
     print "\n" * 2
-    vector = manager_offset.predict_vector(word, print_transformation=True)
+    vector = manager_offset.predict_vector(word, print_transformation=True, demonstration=True)
     if vector is None:
         print "Could not predict vector"
         continue
