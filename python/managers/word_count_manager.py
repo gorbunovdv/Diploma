@@ -34,7 +34,10 @@ class WordCountManager:
     def calculate_word_count(self):
         self.count = {}
         for [word, count] in map(lambda line: line.split(), open(config["word2vec"]["vocab"]).readlines()):
-            word = to_unicode(word)
+            try:
+                word = to_unicode(word)
+            except UnicodeDecodeError:
+                logger.info("Could not parse word " + str([word, count]))
             self.count[word] = int(count)
 
     def check_word_counts(self, word2vec, word1, word2):
