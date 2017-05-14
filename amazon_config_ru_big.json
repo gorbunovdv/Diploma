@@ -2,6 +2,7 @@
   "word2vec" : {
     "model" : "vectors10",
     "path" : "./vectors.bin",
+    "vocab": "./vectors.vocab",
     "valid_letters": "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧХЩЪЫЬЭЮЯ-"
   },
   "transformations_iterator" : {
