@@ -19,6 +19,16 @@ class VectorBuilder:
         self.transformation, self.length, self.s_transformations = self.calculate_rs(word2vec, self.mapping)
         self.word_count = word_count
 
+    def __getitem__(self, item):
+        vector = self.predict_vector(item)
+        if vector is None:
+            raise KeyError()
+        return vector
+
+    def __contains__(self, item):
+        vector = self.predict_vector(item)
+        return vector != None
+
     """
         Насчитать множество RS по ациклическому графу
     """
