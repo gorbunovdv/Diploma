@@ -27,14 +27,16 @@ struct Word2Vec {
     fscanf(file->asFilePointer(), "%lld", &dimensionsCount_);
     std::tie(wordsCount, dimensionsCount) = std::tie(wordsCount_, dimensionsCount_);
     std::set<int32_t> letters_list = utf_string(config["word2vec"]["valid_letters"].asString()).set();
+    std::ofstream fout("cpp_invalid_words.txt");
     for (int32_t i = 0; i < wordsCount; i++) {
-      bool addWord = true;
+      bool addWord = true, skipWord = false;
       auto cur = std::make_shared<Vocab>();
       cur->index = i;
       try {
         cur->word = read_word(file->asFilePointer());
         if (!check_if_word_is_valid(cur->word, letters_list)) {
           addWord = false;
+          skipWord = true;
         }
       } catch (std::exception e) {
         LOGGER() << "UTF8 decoding failed: skipping word" << std::endl;
@@ -47,8 +49,12 @@ struct Word2Vec {
       } else {
         i--;
         wordsCount--;
+        if (!skipWord) {
+          fout << cur->word << std::endl;
+        }
       }
     }
+    fout.close();
     for (auto entity : index2word) {
       vocab[entity->word] = entity;
     }

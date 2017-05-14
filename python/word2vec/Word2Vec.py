@@ -30,8 +30,10 @@ class Word2Vec:
         binary_length = numpy.dtype(numpy.float32).itemsize * self.dimensions_count
         deleted_words = 0
         syn0 = []
+        fout = open("python_invalid_words.txt", "w")
         while i < self.words_count:
             add_word = True
+            skip_word = False
             cur = Vocab()
             cur.index = i
             try:
@@ -41,6 +43,7 @@ class Word2Vec:
             except Exception, e:
                 logger.info("UTF encoding failed: skipping word")
                 add_word = False
+                skip_word = True
             cur.syn0 = numpy.fromstring(fin.read(binary_length), dtype=numpy.float32)
             if add_word:
                 self.index2word.append(cur)
@@ -48,10 +51,13 @@ class Word2Vec:
                 self.vocab[cur.word] = cur
                 self.word_list.add(cur.word)
             else:
+                if not skip_word:
+                    fout.write(cur.word)
                 i -= 1
                 self.words_count -= 1
                 deleted_words += 1
             i += 1
+        fout.close()
         self.syn0 = numpy.array(syn0)
         logger.info("Deleted {} words".format(deleted_words))
         logger.info("{} words in model".format(self.words_count))
