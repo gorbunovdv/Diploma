@@ -28,6 +28,7 @@ struct Word2Vec {
     std::tie(wordsCount, dimensionsCount) = std::tie(wordsCount_, dimensionsCount_);
     std::set<int32_t> letters_list = utf_string(config["word2vec"]["valid_letters"].asString()).set();
     std::ofstream fout("cpp_invalid_words.txt");
+    int32_t deleted_words = 0;
     for (int32_t i = 0; i < wordsCount; i++) {
       bool addWord = true, skipWord = false;
       auto cur = std::make_shared<Vocab>();
@@ -49,6 +50,7 @@ struct Word2Vec {
       } else {
         i--;
         wordsCount--;
+        deleted_words++;
         if (!skipWord) {
           fout << cur->word << std::endl;
         }
@@ -60,6 +62,7 @@ struct Word2Vec {
     }
     LOGGER() << "Successfully loaded word2vec model" << std::endl;
     LOGGER() << "There are " << len(index2word) << " words in model" << std::endl;
+    LOGGER() << "Deleted " << deleted_words << std::endl;
     LOGGER() << "Last one is \"" << index2word.back()->word << "\"" << std::endl;
   }
 
