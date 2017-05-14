@@ -27,7 +27,7 @@ class VectorBuilder:
 
     def __contains__(self, item):
         vector = self.predict_vector(item)
-        return vector != None
+        return vector is not None
 
     """
         Насчитать множество RS по ациклическому графу
