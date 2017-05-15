@@ -36,6 +36,10 @@ while True:
         print "Word is not in Initial Vocab"
     else:
         vector = initial_vocab[word]
+        if word not in word_count_manager.count:
+            print "Weird, but word {} is not in vocab".format(word.encode('utf-8'))
+            print "Few words in vocab: ", list(word_count_manager.count)[:100]
+            continue
         print "Frequency is {}".format(word_count_manager.count[word])
         distances = sorted([(numpy.dot(vector / numpy.linalg.norm(vector), vector2 / numpy.linalg.norm(vector2)), word2) for word2, vector2 in initial_vocab.iteritems()], reverse=True)[:10]
         for distance2, word2 in distances:
