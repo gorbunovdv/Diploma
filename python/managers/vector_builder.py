@@ -406,7 +406,7 @@ class TransformationShowVectorBuilder:
     @classmethod
     def composite2(cls, word2vec, word1, word2, transformation):
         p_delete, p_add, s_delete, s_add, list = transformation
-        p_delete, p_add, s_delete, s_add = cls.composite(word1, word2, transformation)
+        p_delete, p_add, s_delete, s_add = cls.composite(word1, word2, (p_delete, p_add, s_delete, s_add))
         list.append(cls.composite(word2vec.index2word[word1].word,
                                     word2vec.index2word[word2].word,
                                     ('', '', '', '')))
