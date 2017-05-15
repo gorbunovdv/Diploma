@@ -19,7 +19,7 @@ class RoyalManager:
         self.word2vec = word2vec
 
     def run(self):
-        fin = open(config["parameters"]["morphological_transformations_build"]["path"] + "/results.txt")
+        fin = open(config["parameters"]["morphological_transformations_build"]["path"] + "/result.txt")
         fout = open(config["parameters"]["morphological_transformations_build"]["path"] + "/examples.txt", "w")
         for a, b, c, d in map(lambda line: map(int, line.strip().split()), fin.readlines()):
             fout.write("{} {} {} {}\n".format(
