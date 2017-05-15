@@ -19,10 +19,10 @@ class RoyalManager:
         self.word2vec = word2vec
 
     def run(self):
-        NearestNeighboursManager.calculate_nearest_neighbours(self.word2vec)
+        # NearestNeighboursManager.calculate_nearest_neighbours(self.word2vec)
         word_count_manager = WordCountManager()
-        MorphologicalTransformationManager.calculate_morphological_transformations(self.word2vec, word_count_manager)
-        AcyclicGraphManager.calculate_acyclic_graph(self.word2vec, word_count_manager)
+        # MorphologicalTransformationManager.calculate_morphological_transformations(self.word2vec, word_count_manager)
+        # AcyclicGraphManager.calculate_acyclic_graph(self.word2vec, word_count_manager)
         builder = VectorBuilder(self.word2vec, word_count_manager.count)
         builder_offset = OffsetVectorBuilder(self.word2vec, word_count_manager.count)
         initial_vocab = self.word2vec.generate_vocab()
