@@ -368,18 +368,18 @@ class TransformationShowVectorBuilder:
         for i in range(len(transformation)):
             if (transformation[i][0], transformation[i][1], transformation[i][2], transformation[i][3]) == ('', '', '', ''):
                 continue
-            p_delete, p_add, s_delete, s_add, list = transformation[i]
-            transformations[p_delete][s_delete].append((p_add, s_add, length[i], list))
+            p_delete, p_add, s_delete, s_add, listx = transformation[i]
+            transformations[p_delete][s_delete].append((p_add, s_add, length[i], listx))
 
         for vertex, to_vertex in mapping.iteritems():
             if to_vertex == -1:
                 continue
-            p_delete, p_add, s_delete, s_add, list = cls.composite2(word2vec, word2vec.index2word[vertex].word,
+            p_delete, p_add, s_delete, s_add, listx = cls.composite2(word2vec, word2vec.index2word[vertex].word,
                                                    word2vec.index2word[to_vertex].word,
                                                    ('', '', '', '', []))
             if (p_delete, p_add, s_delete, s_add) == ('', '', '', ''):
                 continue
-            s_transformations[p_delete][s_delete].append((p_add, s_add, list))
+            s_transformations[p_delete][s_delete].append((p_add, s_add, listx))
 
         return transformations, length, s_transformations
 
