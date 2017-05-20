@@ -11,7 +11,7 @@
 #ifdef WORK
     #include <jsoncpp/json/json.h>
 #else
-    #include <jsoncpp/json/json.h>
+    #include <json/json.h>
 #endif
 
 Json::Value config;
