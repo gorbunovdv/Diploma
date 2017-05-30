@@ -35,14 +35,14 @@ private:
   // Функция, осуществующая только фильтрацию отсортированных классов
   static void filterTransformations(const std::shared_ptr<Word2Vec> &word2vec, std::string sourcePath, std::string destPath) {
     LOGGER() << "Filtering transformation classes" << std::endl;
-    int32_t min_transformations_in_class = config["parameters"]["transformations_filter"]["min_transformations_in_class"].asInt();
-    LOGGER() << "Minimum number of transformations in class: " << min_transformations_in_class << std::endl;
+    int32_t minTransformationsInClass = config["parameters"]["transformations_filter"]["min_transformations_in_class"].asInt();
+    LOGGER() << "Minimum number of transformations in class: " << minTransformationsInClass << std::endl;
     TransformationsReader reader(sourcePath, word2vec);
     TransformationsWriter writer(destPath, word2vec);
     int32_t transformationClasses = 0, transformations = 0;
     int32_t largestTransformationClass = 0;
-    reader.foreachClass(word2vec, [&largestTransformationClass, &min_transformations_in_class, &writer, &transformationClasses, &transformations](const std::vector<Transformation> &transformationClass){
-      if (FilterTransformationManager::validTransformationClass(transformationClass, min_transformations_in_class)) {
+    reader.foreachClass(word2vec, [&largestTransformationClass, &minTransformationsInClass, &writer, &transformationClasses, &transformations](const std::vector<Transformation> &transformationClass){
+      if (FilterTransformationManager::validTransformationClass(transformationClass, minTransformationsInClass)) {
         writer.write(transformationClass);
         transformationClasses++;
         transformations += len(transformationClass);
