@@ -21,10 +21,10 @@ class RoyalManager:
         self.word2vec = word2vec
 
     def run(self):
-        #NearestNeighboursManager.calculate_nearest_neighbours(self.word2vec)
+        NearestNeighboursManager.calculate_nearest_neighbours(self.word2vec)
         word_count_manager = WordCountManager()
-        #MorphologicalTransformationManager.calculate_morphological_transformations(self.word2vec, word_count_manager)
-        #AcyclicGraphManager.calculate_acyclic_graph(self.word2vec, word_count_manager)
+        MorphologicalTransformationManager.calculate_morphological_transformations(self.word2vec, word_count_manager)
+        AcyclicGraphManager.calculate_acyclic_graph(self.word2vec, word_count_manager)
         GexfManager.add_gexf_format(config["parameters"]["acyclic_graph"]["path"] + "/result.txt", config["parameters"]["acyclic_graph"]["path"] + "/graph.gexf", self.word2vec)
         builder = VectorBuilder(self.word2vec, word_count_manager.count)
         builder_offset = OffsetVectorBuilder(self.word2vec, word_count_manager.count)
