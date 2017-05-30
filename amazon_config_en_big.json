@@ -10,8 +10,8 @@
   },
   "parameters" : {
     "transformations_build" : {
-      "remove_add_symbols_count" : 3,
-      "total_changes_count" : 6,
+      "remove_add_symbols_count" : 4,
+      "total_changes_count" : 8,
       "use_shortest_transformations" : true,
       "result_path": "./results/transformations_build"
     },
